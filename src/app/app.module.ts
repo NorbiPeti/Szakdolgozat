@@ -17,6 +17,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { RegisterComponent } from './register/register.component';
+import {LoginService} from './shared/login.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,9 @@ import { RegisterComponent } from './register/register.component';
     MatInputModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    LoginService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,1 +1,32 @@
-<p>register works!</p>
+<h1>Regisztráció</h1>
+<form>
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput [formControl]="emailFormControl" [errorStateMatcher]="matcher"
+           class="mat-input-element" type="email" name="email" required="required"
+           placeholder="h123456@stud.u-szeged.hu"/>
+    <mat-hint>Egyetemi email cim</mat-hint>
+    <mat-error *ngIf="emailHasError('email')">
+      Az email formátuma nem megfelelő
+    </mat-error>
+    <mat-error *ngIf="emailHasError('required')">
+      Az email megadása kötelező
+    </mat-error>
+    <mat-error *ngIf="emailHasError('unimail')">
+      Egyetemi email megadása szükséges
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Jelszó</mat-label>
+    <input matInput [formControl]="passFormControl" [errorStateMatcher]="matcher"
+           class="mat-input-element" type="password" name="password" required="required"
+           minlength="8"/>
+    <mat-error *ngIf="passFormControl.hasError('minlength') && !passFormControl.hasError('required')">
+      A jelszónak legalább 8 karakterből kell állnia.
+    </mat-error>
+    <mat-error *ngIf="passFormControl.hasError('required')">
+      A jelszó megadása kötelező.
+    </mat-error>
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="doLogin()">Bejelentkezés</button>
+</form>
