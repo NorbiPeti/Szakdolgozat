@@ -49,23 +49,17 @@ export class RegisterComponent implements OnInit {
    * @param code Az ellenőrizendő hibatipus
    */
   emailHasError(code: string): boolean {
-    console.log('Checking ' + code);
     const error = this.emailFormControl.hasError(code);
-    console.log('Error: ' + error);
     if (!error) {
       return false;
     }
-    console.log('Checking codes...');
     for (const ec of this.emailErrorCodes) {
-      console.log('ec: ' + ec);
       if (ec === code) {
         break;
       }
-      console.log('It\'s different');
       if (this.emailFormControl.hasError(ec)) {
         return false;
       }
-      console.log('No error for ec');
     }
     return error;
   }
@@ -73,8 +67,8 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  doLogin(): void {
-    alert('Login');
+  doRegister(): void {
+    alert('Regisztráció');
   }
 
 }
