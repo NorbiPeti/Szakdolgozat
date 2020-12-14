@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {AbstractControl, FormControl, FormGroupDirective, NgForm, ValidationErrors, Validators} from '@angular/forms';
+import firebase from 'firebase';
 
 export class FormErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -67,8 +68,16 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  doRegister(): void {
-    alert('Regisztráció');
+  async doRegister(): Promise<void> {
+    if (this.emailFormControl.errors !== null) {
+      return;
+    }
+    try {
+      const user = await firebase.auth().createUserWithEmailAndPassword(this.emailFormControl.value, this.passFormControl.value);
+      alert('User created: ' + user);
+    } catch (e) {
+      alert(e);
+    }
   }
 
 }

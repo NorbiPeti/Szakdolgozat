@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import firebase from 'firebase';
 
 @Component({
   selector: 'app-root',
@@ -8,3 +9,5 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'Szakdolgozat';
 }
+
+firebase.initializeApp((window as any).firebaseCredentials);
