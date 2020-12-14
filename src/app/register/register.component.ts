@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {AbstractControl, FormControl, FormGroupDirective, NgForm, ValidationErrors, Validators} from '@angular/forms';
 import firebase from 'firebase';
+import {LoginService} from '../shared/login.service';
+import {Router} from '@angular/router';
 
 export class FormErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -17,7 +19,7 @@ export class FormErrorStateMatcher implements ErrorStateMatcher {
 })
 export class RegisterComponent implements OnInit {
 
-  constructor() {
+  constructor(private loginService: LoginService, private router: Router) {
   }
 
   emailFormControl = new FormControl('', [
@@ -73,8 +75,8 @@ export class RegisterComponent implements OnInit {
       return;
     }
     try {
-      const user = await firebase.auth().createUserWithEmailAndPassword(this.emailFormControl.value, this.passFormControl.value);
-      alert('User created: ' + user);
+      await this.loginService.createUser(this.emailFormControl.value, this.passFormControl.value);
+      await this.router.navigate(['/']);
     } catch (e) {
       alert(e);
     }

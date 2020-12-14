@@ -3,13 +3,13 @@
   <mat-form-field>
     <mat-label>Email</mat-label>
     <input matInput class="mat-input-element" type="email" name="email" required="required"
-           placeholder="h123456@stud.u-szeged.hu"/>
+           placeholder="h123456@stud.u-szeged.hu" [(ngModel)]="email"/>
     <mat-hint>Egyetemi email cim</mat-hint>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Jelszó</mat-label>
     <input matInput class="mat-input-element" type="password" name="password" required="required"
-           minlength="8"/>
+           minlength="8" [(ngModel)]="pass"/>
   </mat-form-field>
   <button mat-raised-button color="primary" (click)="doLogin()">Bejelentkezés</button>
 </form>
