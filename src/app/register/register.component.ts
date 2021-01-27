@@ -29,7 +29,8 @@ export class RegisterComponent implements OnInit {
   ]);
 
   passFormControl = new FormControl('', [
-    Validators.required
+    Validators.required,
+    Validators.minLength(8)
   ]);
 
   matcher = new FormErrorStateMatcher();

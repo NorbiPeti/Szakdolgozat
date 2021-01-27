@@ -4,21 +4,26 @@ service cloud.firestore {
     function sameUser(user) {
       return request.auth != null && request.auth.uid == user;
     }
-    function getUserData() {
+    /*function getUserData() {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
-    }
+    }*/
+
     //Felhasználói adatok kezelése
     match /users/{user} {
       allow create: if sameUser(user) && request.auth.uid == request.resource.data.author_uid;
       allow get, list, update, delete: if sameUser(user) && request.auth.uid == resource.data.author_uid;
     }
+
     //Adminoknak mindent lehet
     match /data/{document=**} {
-      allow get, list, create, update, delete: if getUserData().isAdmin == true;
+      allow get, list, create, update, delete: if auth.token.admin;
     }
-    //Diákok megnézhetik a kurzus adatait
-    match /data/courses/{course} {
+    //Diákok megnézhetik a tárgy adatait
+    match /data/subjects/{subject=**} {
       allow get, list: if request.auth.uid in resource.data.students;
+    }
+    match /data/subjects/{subject}/requirements/{requirement=**} {
+      allow read, write: if request.auth.uid in resource.data.teachers;
     }
   }
 }
