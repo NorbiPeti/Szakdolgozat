@@ -3,7 +3,6 @@ import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Observable} from 'rxjs';
 import {map, shareReplay} from 'rxjs/operators';
 import {LoginService} from './shared/login.service';
-import firebase from 'firebase';
 import {Router} from '@angular/router';
 
 @Component({

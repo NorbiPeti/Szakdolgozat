@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {AbstractControl, FormControl, FormGroupDirective, NgForm, ValidationErrors, Validators} from '@angular/forms';
-import firebase from 'firebase';
 import {LoginService} from '../shared/login.service';
 import {Router} from '@angular/router';
 
