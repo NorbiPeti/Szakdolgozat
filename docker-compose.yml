@@ -6,7 +6,7 @@ services:
     volumes:
       - ./frontend:/home/node/app
     environment:
-      - NODE_ENV=development
+      - COMMAND=run
 
 networks:
   default:
