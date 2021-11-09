@@ -1,5 +1,7 @@
 FROM node:16
 
+USER node
+
 EXPOSE 4200
 
 WORKDIR /home/node/app

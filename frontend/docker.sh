@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ $COMMAND == "deploy" ]; then
+if [ "$COMMAND" == "deploy" ]; then
     npm run buildProd
     npm install -g firebase-tools
     firebase login --no-localhost
