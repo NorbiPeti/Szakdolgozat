@@ -15,6 +15,7 @@ services:
       - ./backend:/home/node/app
     environment:
       - COMMAND=run
+      - DATABASE_URL=${CLEARDB_DATABASE_URL}
 
 networks:
   default:

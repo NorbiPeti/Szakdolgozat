@@ -8,4 +8,5 @@ fi
 echo "Installing packages"
 npm install
 echo "Running application"
+npm run rebuild
 npm run start:watch
