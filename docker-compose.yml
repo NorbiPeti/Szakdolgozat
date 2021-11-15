@@ -16,6 +16,12 @@ services:
     environment:
       - COMMAND=run
       - DATABASE_URL=${CLEARDB_DATABASE_URL}
+  database:
+    image: mysql:5.6
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=DevelopmentPassword
 
 networks:
   default:
