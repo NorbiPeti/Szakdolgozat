@@ -5,6 +5,7 @@ export * from './application';
 export async function main(options: ApplicationConfig = {}) {
   const app = new SzakdolgozatBackendApplication(options);
   await app.boot();
+  await app.migrateSchema({existingSchema: 'alter'});
   await app.start();
 
   const url = app.restServer.url;

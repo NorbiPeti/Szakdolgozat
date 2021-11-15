@@ -23,6 +23,8 @@ RUN apt-get update
 RUN apt-get install -y docker-ce docker-ce-cli containerd.io
 # Install Heroku CLI
 RUN curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+# Install wait-for-it
+RUN apt-get install -y wait-for-it
 
 ENTRYPOINT [ "/docker.sh" ]
 CMD [ "run" ]

@@ -19,4 +19,5 @@ echo "Installing packages"
 npm install
 echo "Running application"
 npm run rebuild
+wait-for-it database:3306 -t 0
 npm run start:watch

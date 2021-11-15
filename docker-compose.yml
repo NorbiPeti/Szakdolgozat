@@ -15,13 +15,17 @@ services:
       - ./backend:/home/node/app
     environment:
       - COMMAND=run
-      - DATABASE_URL=${CLEARDB_DATABASE_URL}
+      - DATABASE_URL=mysql://szakdolgozat:DevelopmentPassword@database/szakdolgozat
+    user: ${USERNAME:-node}
   database:
     image: mysql:5.6
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=DevelopmentPassword
+      - MYSQL_ROOT_PASSWORD=VerySecretPassword
+      - MYSQL_DATABASE=szakdolgozat
+      - MYSQL_USER=szakdolgozat
+      - MYSQL_PASSWORD=DevelopmentPassword
 
 networks:
   default:

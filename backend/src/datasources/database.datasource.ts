@@ -4,7 +4,7 @@ import {juggler} from '@loopback/repository';
 const config = {
   name: 'database',
   connector: 'mysql',
-  url: process.env.DATABASE_URL,
+  url: process.env.DATABASE_URL ?? process.env.CLEARDB_DATABASE_URL,
   host: '',
   port: 0,
   user: '',
