@@ -11,7 +11,7 @@ import path from 'path';
 import {MySequence} from './sequence';
 import {AuthenticationComponent} from '@loopback/authentication';
 import {JWTAuthenticationComponent, UserServiceBindings} from '@loopback/authentication-jwt';
-import {DatabaseDataSource} from './datasources';
+import {SzakdolgozatUserService} from './services';
 
 export {ApplicationConfig};
 
@@ -36,7 +36,7 @@ export class SzakdolgozatBackendApplication extends BootMixin(
     // Authentication
     this.component(AuthenticationComponent);
     this.component(JWTAuthenticationComponent);
-    this.dataSource(DatabaseDataSource, UserServiceBindings.DATASOURCE_NAME)
+    this.service(SzakdolgozatUserService, UserServiceBindings.USER_SERVICE);
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here
