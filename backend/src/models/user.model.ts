@@ -39,10 +39,10 @@ export class User extends Entity {
   password: string;
 
   @property({
-    type: 'string',
+    type: 'boolean',
     required: true,
   })
-  role: 'admin' | 'teacher' | 'student';
+  isAdmin: boolean;
 
 
   constructor(data?: Partial<User>) {

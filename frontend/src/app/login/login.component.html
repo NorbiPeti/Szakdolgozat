@@ -3,13 +3,16 @@
   <mat-form-field>
     <mat-label>Email</mat-label>
     <input matInput class="mat-input-element" type="email" name="email" required="required"
-           placeholder="h123456@stud.u-szeged.hu" [(ngModel)]="email"/>
+           placeholder="h123456@stud.u-szeged.hu" [formControl]="email" [errorStateMatcher]="matcher"/>
     <mat-hint>Egyetemi email cim</mat-hint>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Jelszó</mat-label>
     <input matInput class="mat-input-element" type="password" name="password" required="required"
-           minlength="8" [(ngModel)]="pass"/>
+           minlength="8" [formControl]="pass" [errorStateMatcher]="matcher"/>
   </mat-form-field>
+  <mat-error *ngIf="matcher.isErrorState(email, null)">
+    A megadott email cim vagy jelszó nem megfelelő
+  </mat-error>
   <button mat-raised-button color="primary" (click)="doLogin()">Bejelentkezés</button>
 </form>

@@ -17,10 +17,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {RegisterComponent} from './register/register.component';
 import {LoginService} from './shared/login.service';
-import {AngularFireModule, FirebaseApp} from '@angular/fire';
-import {AngularFireAuthModule} from '@angular/fire/auth';
-import {AngularFirestoreModule} from '@angular/fire/firestore';
-import {AngularFireDatabaseModule} from '@angular/fire/database';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -43,10 +40,7 @@ import {AngularFireDatabaseModule} from '@angular/fire/database';
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    AngularFireModule.initializeApp((window as any).firebaseCredentials),
-    AngularFirestoreModule,
-    AngularFireDatabaseModule,
-    AngularFireAuthModule
+    HttpClientModule
   ],
   providers: [
     LoginService

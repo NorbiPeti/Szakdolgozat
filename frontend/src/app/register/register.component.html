@@ -17,6 +17,18 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field>
+    <mat-label>Teljes név</mat-label>
+    <input matInput [formControl]="nameFormControl" [errorStateMatcher]="matcher"
+           class="mat-input-element" type="text" name="name" required="required"
+           minlength="4"/>
+    <mat-error *ngIf="nameFormControl.hasError('pattern') && !nameFormControl.hasError('required')">
+      A név formátuma nem megfelelő.
+    </mat-error>
+    <mat-error *ngIf="nameFormControl.hasError('required')">
+      A teljes név megadása kötelező.
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
     <mat-label>Jelszó</mat-label>
     <input matInput [formControl]="passFormControl" [errorStateMatcher]="matcher"
            class="mat-input-element" type="password" name="password" required="required"

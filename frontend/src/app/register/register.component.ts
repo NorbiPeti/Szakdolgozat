@@ -1,15 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ErrorStateMatcher} from '@angular/material/core';
-import {AbstractControl, FormControl, FormGroupDirective, NgForm, ValidationErrors, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, ValidationErrors, Validators} from '@angular/forms';
 import {LoginService} from '../shared/login.service';
 import {Router} from '@angular/router';
-
-export class FormErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
+import {FormErrorStateMatcher} from '../utility/form-error-state-matcher';
 
 @Component({
   selector: 'app-register',
@@ -25,6 +18,10 @@ export class RegisterComponent implements OnInit {
     Validators.required,
     Validators.email,
     RegisterComponent.validateUniEmail
+  ]);
+
+  nameFormControl = new FormControl('', [
+    Validators.pattern(/([A-Za-z-.]+ )+[A-Za-z-.]+/)
   ]);
 
   passFormControl = new FormControl('', [
@@ -75,7 +72,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
     try {
-      await this.loginService.createUser(this.emailFormControl.value, this.passFormControl.value);
+      await this.loginService.createUser(this.emailFormControl.value, this.passFormControl.value, this.nameFormControl.value);
       await this.router.navigate(['/']);
     } catch (e) {
       alert(e);

@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {LoginService} from '../shared/login.service';
+import {FormErrorStateMatcher} from '../utility/form-error-state-matcher';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -8,8 +10,9 @@ import {LoginService} from '../shared/login.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  email: string;
-  pass: string;
+  email = new FormControl('');
+  pass = new FormControl('');
+  matcher = new FormErrorStateMatcher();
 
   constructor(private router: Router, private loginService: LoginService) {
   }
@@ -19,7 +22,15 @@ export class LoginComponent implements OnInit {
   }
 
   async doLogin(): Promise<void> {
-    await this.loginService.login(this.email, this.pass);
-    await this.router.navigate(['/']);
+    if (await this.loginService.login(this.email.value, this.pass.value)) {
+      await this.router.navigate(['/']);
+    } else {
+      this.email.setErrors({
+        login: true
+      });
+      this.pass.setErrors({
+        login: true
+      });
+    }
   }
 }
