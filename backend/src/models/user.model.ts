@@ -1,4 +1,6 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Course} from './course.model';
+import {CourseUser} from './course-user.model';
 
 @model()
 export class User extends Entity {
@@ -44,6 +46,8 @@ export class User extends Entity {
   })
   isAdmin: boolean;
 
+  @hasMany(() => Course, {through: {model: () => CourseUser}})
+  courses: Course[];
 
   constructor(data?: Partial<User>) {
     super(data);
