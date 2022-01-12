@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
     );
 
   menu: MenuItem[] = [
-    {path: 'subjects', title: 'Tárgyak', requiredRole: 'admin'}
+    {path: 'users', title: 'Felhasználók', requiredRole: 'admin'}
   ];
 
   constructor(private breakpointObserver: BreakpointObserver, public loginService: LoginService, private api: ApiService,
