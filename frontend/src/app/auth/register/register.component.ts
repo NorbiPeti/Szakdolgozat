@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, ValidationErrors, Validators} from '@angular/forms';
-import {LoginService} from '../shared/login.service';
+import {LoginService} from '../login.service';
 import {Router} from '@angular/router';
-import {FormErrorStateMatcher} from '../utility/form-error-state-matcher';
+import {FormErrorStateMatcher} from '../../utility/form-error-state-matcher';
 
 @Component({
   selector: 'app-register',

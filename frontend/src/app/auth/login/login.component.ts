@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {LoginService} from '../shared/login.service';
-import {FormErrorStateMatcher} from '../utility/form-error-state-matcher';
+import {LoginService} from '../login.service';
+import {FormErrorStateMatcher} from '../../utility/form-error-state-matcher';
 import {FormControl} from '@angular/forms';
 
 @Component({

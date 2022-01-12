@@ -1,11 +1,21 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {LoginComponent} from './login/login.component';
-import {RegisterComponent} from './register/register.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { AuthCheck } from './auth-check';
 
 const routes: Routes = [
-  {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterComponent}
+  {
+    path: '',
+    children: [
+      {path: 'auth', loadChildren: async () => (await import('./auth/auth.module')).AuthModule}
+    ]
+  },
+  {
+    path: '',
+    canActivate: [AuthCheck],
+    children: [
+      {path: 'users', loadChildren: async () => (await import('./users/users.module')).UsersModule}
+    ]
+  }
 ];
 
 @NgModule({

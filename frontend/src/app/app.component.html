@@ -26,8 +26,8 @@
         <a mat-button (click)="logout()">Kijelentkezés</a>
       </span>
       <span *ngIf="!loginService.token">
-        <a mat-button routerLink="/register">Regisztráció</a>
-        <a mat-button routerLink="/login">
+        <a mat-button routerLink="/auth/register">Regisztráció</a>
+        <a mat-button routerLink="/auth/login">
           Bejelentkezés
           <mat-icon aria-hidden="false" aria-label="Bejelentkezés">login</mat-icon>
         </a>
