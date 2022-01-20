@@ -19,7 +19,7 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Oldalsáv">menu</mat-icon>
       </button>
-      <span>Szakdolgozat</span>
+      <span>{{ pageTitle }}</span>
       <span class="toolbar-spacer"></span>
       <span *ngIf="loginService.token">
         <span>{{ loginService.user.name }}</span>

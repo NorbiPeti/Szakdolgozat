@@ -16,7 +16,7 @@ services:
     environment:
       - COMMAND=run
       - DATABASE_URL=mysql://szakdolgozat:DevelopmentPassword@database/szakdolgozat
-    user: ${USERNAME:-node}
+    user: ${SZD_USERNAME:-node}
   database:
     image: mysql:5.6
     ports:

@@ -13,7 +13,11 @@ const routes: Routes = [
     path: '',
     canActivate: [AuthCheck],
     children: [
-      {path: 'users', loadChildren: async () => (await import('./users/users.module')).UsersModule}
+      {
+        path: 'users',
+        loadChildren: async () => (await import('./users/users.module')).UsersModule,
+        data: {title: 'Felhasználók'} as RouteData
+      }
     ]
   }
 ];
@@ -24,3 +28,5 @@ const routes: Routes = [
 })
 export class AppRoutingModule {
 }
+
+export type RouteData = { title: string; };
