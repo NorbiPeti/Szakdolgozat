@@ -12,13 +12,10 @@ export class ListComponent<T> implements OnInit {
 
   @Input() apiPath: string;
   @Input() itemType: Type<T>;
+  @Input() columns: {title: string, prop: keyof T}[];
 
   paginationData: PaginationData = {};
   items: T[] = [];
-  columns: { title: string, prop: string }[] = [
-    {title: 'Név', prop: 'name'},
-    {title: 'Admin', prop: 'isAdmin'}
-  ];
   loading = false;
 
   constructor(private api: ApiService) {
