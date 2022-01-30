@@ -16,6 +16,7 @@ export class TableComponent<T> implements OnInit {
   @Input() paginationData: PaginationData = {page: 1, limit: 10};
 
   @Output() pageChange = new EventEmitter<PageEvent>();
+  @Output() editItem = new EventEmitter<T>();
 
   constructor() {
   }

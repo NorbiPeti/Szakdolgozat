@@ -1,0 +1,12 @@
+<div *ngIf="item; else loading">
+  <form [formGroup]="formGroup">
+    <mat-form-field *ngFor="let field of fields">
+      <mat-label>{{ field.title }}</mat-label>
+      <input matInput [formControlName]="field.name" type="text"/>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="submit()">Mentés</button>
+  </form>
+</div>
+<ng-template #loading>
+  <mat-spinner [diameter]="100" [style.margin]="'auto'"></mat-spinner>
+</ng-template>

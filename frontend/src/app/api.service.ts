@@ -11,7 +11,7 @@ export class ApiService {
   constructor(private http: HttpClient, private loginService: LoginService) {
   }
 
-  request(method: 'post' | 'get' | 'delete', url: string, body: any): Promise<any> {
+  request(method: 'post' | 'get' | 'delete' | 'patch', url: string, body: any): Promise<any> {
     return this.http.request(method, environment.backendUrl + url, {
       body,
       headers: {Authorization: 'Bearer ' + this.loginService.token}

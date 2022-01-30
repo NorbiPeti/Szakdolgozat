@@ -1,4 +1,6 @@
-export class User {
+import { Model } from './model';
+
+export class User extends Model {
   name: string;
   isAdmin: boolean;
 }

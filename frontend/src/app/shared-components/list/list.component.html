@@ -1,4 +1,4 @@
 <app-table [items]="items" (pageChange)="handlePageChange($event)" [paginationData]="paginationData" [columns]="columns"
-           [loading]="loading">
+           [loading]="loading" (editItem)="editItem($event)">
 
 </app-table>

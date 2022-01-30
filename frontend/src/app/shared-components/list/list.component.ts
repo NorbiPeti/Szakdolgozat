@@ -2,23 +2,25 @@ import { Component, Input, OnInit, Type } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { PaginationData } from '../../utility/pagination-data';
 import { ApiService } from '../../api.service';
+import { Model } from '../../model/model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
-export class ListComponent<T> implements OnInit {
+export class ListComponent<T extends Model> implements OnInit {
 
   @Input() apiPath: string;
   @Input() itemType: Type<T>;
-  @Input() columns: {title: string, prop: keyof T}[];
+  @Input() columns: { title: string, prop: keyof T }[];
 
   paginationData: PaginationData = {};
   items: T[] = [];
   loading = false;
 
-  constructor(private api: ApiService) {
+  constructor(private api: ApiService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -42,4 +44,8 @@ export class ListComponent<T> implements OnInit {
     }
   }
 
+  async editItem(item: T): Promise<void> {
+    window.localStorage.setItem(this.router.url + '/' + item.id, JSON.stringify(item));
+    await this.router.navigate([this.router.url, item.id]);
+  }
 }
