@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { PaginationData } from '../../utility/pagination-data';
 import { PageEvent } from '@angular/material/paginator';
 
@@ -26,6 +26,10 @@ export class TableComponent<T> implements OnInit {
 
   getPropNames(): string[] {
     return this.columns.map(col => col.prop).concat('actions');
+  }
+
+  getType(itemElement: any): typeof itemElement {
+    return typeof itemElement;
   }
 }
 

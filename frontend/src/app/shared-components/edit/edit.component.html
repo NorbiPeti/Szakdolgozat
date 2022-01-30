@@ -1,4 +1,4 @@
-<div *ngIf="item; else loading">
+<div *ngIf="!isLoading; else loading">
   <form [formGroup]="formGroup">
     <mat-form-field *ngFor="let field of fields">
       <mat-label>{{ field.title }}</mat-label>

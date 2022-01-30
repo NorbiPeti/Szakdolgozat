@@ -6,3 +6,4 @@ export * from './course-user.controller';
 export * from './user-course.controller';
 export * from './course-requirement.controller';
 export * from './course-requirement.controller';
+export * from './subject.controller';

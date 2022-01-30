@@ -1,4 +1,6 @@
+<div style="width: 100%; text-align: right; padding-bottom: 10px" *ngIf="allowNew">
+  <button mat-raised-button color="primary" (click)="newItem()">Hozzáadás</button>
+</div>
 <app-table [items]="items" (pageChange)="handlePageChange($event)" [paginationData]="paginationData" [columns]="columns"
            [loading]="loading" (editItem)="editItem($event)">
-
 </app-table>

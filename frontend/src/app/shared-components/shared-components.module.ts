@@ -11,7 +11,7 @@ import { EditComponent } from './edit/edit.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @NgModule({
@@ -21,16 +21,18 @@ import { MatInputModule } from '@angular/material/input';
     ListComponent,
     EditComponent
   ],
-    imports: [
-        CommonModule,
-        MatProgressBarModule,
-        MatPaginatorModule,
-        MatTableModule,
-        MatButtonModule,
-        MatIconModule,
-        MatProgressSpinnerModule,
-        ReactiveFormsModule,
-        MatInputModule
-    ]
+  imports: [
+    CommonModule,
+    MatProgressBarModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatCheckboxModule
+  ]
 })
-export class SharedComponentsModule { }
+export class SharedComponentsModule {
+}

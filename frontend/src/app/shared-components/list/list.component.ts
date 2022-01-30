@@ -15,6 +15,7 @@ export class ListComponent<T extends Model> implements OnInit {
   @Input() apiPath: string;
   @Input() itemType: Type<T>;
   @Input() columns: { title: string, prop: keyof T }[];
+  @Input() allowNew = false;
 
   paginationData: PaginationData = {};
   items: T[] = [];
@@ -47,5 +48,9 @@ export class ListComponent<T extends Model> implements OnInit {
   async editItem(item: T): Promise<void> {
     window.localStorage.setItem(this.router.url + '/' + item.id, JSON.stringify(item));
     await this.router.navigate([this.router.url, item.id]);
+  }
+
+  async newItem(): Promise<void> {
+   await this.router.navigate([this.router.url, 'new']);
   }
 }
