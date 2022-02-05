@@ -1,12 +1,12 @@
 import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, HasManyThroughRepositoryFactory} from '@loopback/repository';
+import { repository, HasManyThroughRepositoryFactory, DefaultTransactionalRepository } from '@loopback/repository';
 import {DatabaseDataSource} from '../datasources';
 import {User, UserRelations, Course, CourseUser} from '../models';
 import {SubjectRepository} from './subject.repository';
 import {CourseUserRepository} from './course-user.repository';
 import {CourseRepository} from './course.repository';
 
-export class UserRepository extends DefaultCrudRepository<
+export class UserRepository extends DefaultTransactionalRepository<
   User,
   typeof User.prototype.id,
   UserRelations
