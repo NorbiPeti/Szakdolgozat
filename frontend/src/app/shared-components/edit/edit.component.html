@@ -1,9 +1,14 @@
 <div *ngIf="!isLoading; else loading">
   <form [formGroup]="formGroup">
-    <mat-form-field *ngFor="let field of fields">
+    <div *ngFor="let field of fields">
       <mat-label>{{ field.title }}</mat-label>
-      <input matInput [formControlName]="field.name" type="text"/>
-    </mat-form-field>
+      <span [ngSwitch]="getType(item[field.name])">
+        <span *ngSwitchCase="'boolean'"><mat-checkbox [checked]="item[field.name]" [formControlName]="field.name"></mat-checkbox></span>
+        <mat-form-field *ngSwitchDefault>
+          <input matInput [formControlName]="field.name" type="text" [value]="item[field.name]"/>
+        </mat-form-field>
+      </span>
+    </div>
     <button mat-raised-button color="primary" (click)="submit()">Mentés</button>
   </form>
 </div>

@@ -27,7 +27,7 @@ export class ApiService {
   }
 
   requestItemCount(url: string): Promise<number> {
-    return this.request('get', url + '/count', {});
+    return this.request('get', url + '/count', {}).then(count => count.count);
   }
 
   async logout(): Promise<void> {

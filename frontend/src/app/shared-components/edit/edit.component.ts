@@ -36,15 +36,22 @@ export class EditComponent<T extends Model> implements OnInit {
   }
 
   async submit(): Promise<void> {
+    this.isLoading = true;
     try {
       if (this.item) {
         await this.api.request('patch', this.apiPath + '/' + this.item.id, this.formGroup.value);
       } else {
         await this.api.request('post', this.apiPath, this.formGroup.value);
       }
+      await this.router.navigateByUrl(this.router.url.substring(0, this.router.url.lastIndexOf('/')));
     } catch (e) {
       alert(e);
     }
+    this.isLoading = false;
+  }
+
+  getType(itemElement: any): typeof itemElement {
+    return typeof itemElement;
   }
 
 }
