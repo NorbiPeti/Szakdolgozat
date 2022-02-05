@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Type } from '@angular/core';
 import { ApiService } from '../../api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Model } from '../../model/model';
@@ -12,10 +12,12 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 export class EditComponent<T extends Model> implements OnInit {
 
   item?: T;
+  creating = false;
   isLoading = true;
 
   @Input() apiPath: string;
-  @Input() fields: { title: string, name: string }[];
+  @Input() fields: { title: string, name: keyof T }[];
+  @Input() itemType: Type<T>;
   formGroup: FormGroup;
 
   constructor(private api: ApiService, private router: Router, private fb: FormBuilder, private route: ActivatedRoute) {
@@ -31,6 +33,9 @@ export class EditComponent<T extends Model> implements OnInit {
     this.formGroup = this.fb.group(this.fields.reduce((pv, cv) => Object.assign(pv, {[cv.name]: new FormControl()}), {}));
     if (this.item) {
       this.formGroup.patchValue(this.item);
+    } else {
+      this.item = new this.itemType();
+      this.creating = true;
     }
     this.isLoading = false;
   }
@@ -38,14 +43,14 @@ export class EditComponent<T extends Model> implements OnInit {
   async submit(): Promise<void> {
     this.isLoading = true;
     try {
-      if (this.item) {
+      if (this.item && !this.creating) {
         await this.api.request('patch', this.apiPath + '/' + this.item.id, this.formGroup.value);
       } else {
         await this.api.request('post', this.apiPath, this.formGroup.value);
       }
       await this.router.navigateByUrl(this.router.url.substring(0, this.router.url.lastIndexOf('/')));
     } catch (e) {
-      alert(e);
+      alert(e.message);
     }
     this.isLoading = false;
   }

@@ -23,7 +23,8 @@ export class AppComponent implements OnInit {
     );
 
   menu: MenuItem[] = [
-    {path: 'users', requiredRole: 'admin'}
+    {path: 'users', requiredRole: 'admin'},
+    {path: 'subjects', requiredRole: 'admin'}
   ];
 
   routeSegments: RouteSegment[];

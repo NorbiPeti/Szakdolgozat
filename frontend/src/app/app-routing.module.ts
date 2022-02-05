@@ -17,6 +17,11 @@ const routes: Routes = [
         path: 'users',
         loadChildren: async () => (await import('./users/users.module')).UsersModule,
         data: {title: 'Felhasználók'} as RouteData
+      },
+      {
+        path: 'subjects',
+        loadChildren: async () => (await import('./subjects/subjects.module')).SubjectsModule,
+        data: {title: 'Tárgyak'}
       }
     ]
   }

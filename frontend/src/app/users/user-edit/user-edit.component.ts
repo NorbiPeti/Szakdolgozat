@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from '../../model/user.model';
 
 @Component({
   selector: 'app-user-edit',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-edit.component.css']
 })
 export class UserEditComponent implements OnInit {
+  itemType = User;
 
   constructor() { }
 
