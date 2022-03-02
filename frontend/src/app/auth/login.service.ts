@@ -8,12 +8,20 @@ import { User } from '../model/user.model';
 })
 export class LoginService {
 
-  token: string;
-  user: User;
+  private tokenP: string;
+  private userP: User;
+
+  get token(): string {
+    return this.tokenP;
+  }
+
+  get user(): User {
+    return this.userP;
+  }
 
   constructor(private http: HttpClient) {
-    this.token = window.localStorage.getItem('token');
-    this.user = JSON.parse(window.localStorage.getItem('user'));
+    this.tokenP = window.localStorage.getItem('token');
+    this.userP = JSON.parse(window.localStorage.getItem('user'));
   }
 
   async createUser(email: string, password: string, name: string): Promise<void> {
@@ -26,8 +34,8 @@ export class LoginService {
         email,
         password
       }).toPromise();
-      this.token = resp.token;
-      this.user = resp.user;
+      this.tokenP = resp.token;
+      this.userP = resp.user;
       window.localStorage.setItem('token', resp.token);
       window.localStorage.setItem('user', JSON.stringify(resp.user));
       return true;
@@ -37,5 +45,12 @@ export class LoginService {
       }
       throw e;
     }
+  }
+
+  deleteToken(): void {
+    this.tokenP = null;
+    this.userP = null;
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('user');
   }
 }

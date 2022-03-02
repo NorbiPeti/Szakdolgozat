@@ -16,7 +16,7 @@ export class EditComponent<T extends Model> implements OnInit {
   isLoading = true;
 
   @Input() apiPath: string;
-  @Input() fields: { title: string, name: keyof T }[];
+  @Input() fields: { title: string, name: keyof T, readonly?: (item: T) => boolean }[];
   @Input() itemType: Type<T>;
   formGroup: FormGroup;
 
@@ -30,7 +30,13 @@ export class EditComponent<T extends Model> implements OnInit {
     if (!this.item && url[url.length - 1].path !== 'new') {
       this.item = await this.api.request('get', this.apiPath + '/' + this.route.snapshot.url[this.route.snapshot.url.length - 1], {});
     }
-    this.formGroup = this.fb.group(this.fields.reduce((pv, cv) => Object.assign(pv, {[cv.name]: new FormControl()}), {}));
+    this.formGroup = this.fb.group(this.fields.reduce((pv, cv) => {
+      const control = new FormControl();
+      if (cv.readonly && cv.readonly(this.item)) {
+        control.disable();
+      }
+      return Object.assign(pv, {[cv.name]: control});
+    }, {}));
     if (this.item) {
       this.formGroup.patchValue(this.item);
     } else {
@@ -48,7 +54,7 @@ export class EditComponent<T extends Model> implements OnInit {
       } else {
         await this.api.request('post', this.apiPath, this.formGroup.value);
       }
-      await this.router.navigateByUrl(this.router.url.substring(0, this.router.url.lastIndexOf('/')));
+      await this.router.navigate(this.route.parent.snapshot.url.map(segment => segment.path));
     } catch (e) {
       alert(e.message);
     }

@@ -118,6 +118,7 @@ export class UserController {
         description: 'User model count',
         content: {'application/json': {schema: CountSchema}},
     })
+    @authenticate('jwt')
     async count(
         @param.where(User) where?: Where<User>,
     ): Promise<Count> {
@@ -136,6 +137,7 @@ export class UserController {
             },
         },
     })
+    @authenticate('jwt')
     async find(
         @param.filter(User) filter?: Filter<User>,
     ): Promise<User[]> {
@@ -147,6 +149,7 @@ export class UserController {
         description: 'User PATCH success count',
         content: {'application/json': {schema: CountSchema}},
     })
+    @authenticate('jwt')
     async updateAll(
         @requestBody({
             content: {
@@ -170,6 +173,7 @@ export class UserController {
             },
         },
     })
+    @authenticate('jwt')
     async findById(
         @param.path.number('id') id: number,
         @param.filter(User, {exclude: 'where'}) filter?: FilterExcludingWhere<User>
@@ -181,6 +185,7 @@ export class UserController {
     @response(204, {
         description: 'User PATCH success',
     })
+    @authenticate('jwt')
     async updateById(
         @param.path.number('id') id: number,
         @requestBody({
@@ -199,6 +204,7 @@ export class UserController {
     @response(204, {
         description: 'User DELETE success',
     })
+    @authenticate('jwt')
     async deleteById(@param.path.number('id') id: number): Promise<void> {
         await this.userRepository.deleteById(id);
     }

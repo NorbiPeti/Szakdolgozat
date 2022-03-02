@@ -3,7 +3,9 @@
     <div *ngFor="let field of fields">
       <mat-label>{{ field.title }}</mat-label>
       <span [ngSwitch]="getType(item[field.name])">
-        <span *ngSwitchCase="'boolean'"><mat-checkbox [checked]="item[field.name]" [formControlName]="field.name"></mat-checkbox></span>
+        <span *ngSwitchCase="'boolean'">
+          <mat-checkbox [checked]="item[field.name]" [formControlName]="field.name"></mat-checkbox>
+        </span>
         <mat-form-field *ngSwitchDefault>
           <input matInput [formControlName]="field.name" type="text" [value]="item[field.name]"/>
         </mat-form-field>
