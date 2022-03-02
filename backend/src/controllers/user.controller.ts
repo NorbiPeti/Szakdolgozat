@@ -1,5 +1,5 @@
 import {Count, CountSchema, Filter, FilterExcludingWhere, repository, Where,} from '@loopback/repository';
-import {del, get, getModelSchemaRef, param, patch, post, Request, requestBody, response, RestBindings,} from '@loopback/rest';
+import { del, get, getModelSchemaRef, HttpErrors, param, patch, post, Request, requestBody, response, RestBindings, } from '@loopback/rest';
 import {User} from '../models';
 import {UserRepository} from '../repositories';
 import {
@@ -197,6 +197,11 @@ export class UserController {
         })
             user: User,
     ): Promise<void> {
+        if(id === +this.user.id) {
+            const loggedInUser = await this.userService.findUserById(this.user.id);
+            if(user.isAdmin !== undefined && loggedInUser.isAdmin !== user.isAdmin)
+                throw new HttpErrors.BadRequest('Cannot change admin status of self');
+        }
         await this.userRepository.updateById(id, user);
     }
 
