@@ -18,6 +18,10 @@ export class EditComponent<T extends Model> implements OnInit {
   @Input() apiPath: string;
   @Input() fields: { title: string, name: keyof T, readonly?: (item: T) => boolean }[];
   @Input() itemType: Type<T>;
+  /**
+   * Beküldés előtt extra adat hozzáadása
+   */
+  @Input() beforeSubmit: (item: T) => Partial<T>;
   formGroup: FormGroup;
 
   constructor(private api: ApiService, private router: Router, private fb: FormBuilder, private route: ActivatedRoute) {
@@ -48,13 +52,14 @@ export class EditComponent<T extends Model> implements OnInit {
 
   async submit(): Promise<void> {
     this.isLoading = true;
+    const value = Object.assign({}, this.formGroup.value, this.beforeSubmit(this.item) ?? {});
     try {
       if (this.item && !this.creating) {
-        await this.api.request('patch', this.apiPath + '/' + this.item.id, this.formGroup.value);
+        await this.api.request('patch', this.apiPath + '/' + this.item.id, value);
       } else {
-        await this.api.request('post', this.apiPath, this.formGroup.value);
+        await this.api.request('post', this.apiPath, value);
       }
-      await this.router.navigate(this.route.parent.snapshot.url.map(segment => segment.path));
+      await this.router.navigate(['..'], {relativeTo: this.route});
     } catch (e) {
       alert(e.message);
     }

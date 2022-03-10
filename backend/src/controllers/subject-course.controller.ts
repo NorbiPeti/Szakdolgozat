@@ -1,24 +1,6 @@
-import {
-    Count,
-    CountSchema,
-    Filter,
-    repository,
-    Where,
-} from '@loopback/repository';
-import {
-    del,
-    get,
-    getModelSchemaRef,
-    getWhereSchemaFor,
-    param,
-    patch,
-    post,
-    requestBody,
-} from '@loopback/rest';
-import {
-    Subject,
-    Course,
-} from '../models';
+import { Count, CountSchema, Filter, repository, Where, } from '@loopback/repository';
+import { del, get, getModelSchemaRef, getWhereSchemaFor, param, patch, post, requestBody, response, } from '@loopback/rest';
+import { Course, Subject, } from '../models';
 import { SubjectRepository } from '../repositories';
 
 export class SubjectCourseController {
@@ -44,6 +26,18 @@ export class SubjectCourseController {
         @param.query.object('filter') filter?: Filter<Course>,
     ): Promise<Course[]> {
         return this.subjectRepository.courses(id).find(filter);
+    }
+
+    @get('/subjects/{id}/courses/count')
+    @response(200, {
+        description: 'Course model count',
+        content: {'application/json': {schema: CountSchema}},
+    })
+    async count(
+        @param.path.number('id') id: number,
+        @param.where(Course) where?: Where<Course>,
+    ): Promise<Count> {
+        return this.subjectRepository.courses(id).count(where);
     }
 
     @post('/subjects/{id}/courses', {

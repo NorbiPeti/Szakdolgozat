@@ -59,11 +59,10 @@ export class SzakdolgozatUserService implements UserService<User, Credentials> {
 
     //function to find user by id
     async findUserById(id: number): Promise<User & UserWithRelations> {
-        const userNotfound = 'invalid user';
         const foundUser = await this.userRepository.findById(id);
 
         if (!foundUser) {
-            throw new HttpErrors.Unauthorized(userNotfound);
+            throw new HttpErrors.Unauthorized('invalid user');
         }
         return foundUser;
     }

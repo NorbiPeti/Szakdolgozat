@@ -16,6 +16,8 @@ export class ListComponent<T extends Model> implements OnInit {
   @Input() itemType: Type<T>;
   @Input() columns: { title: string, prop: keyof T }[];
   @Input() allowNew = false;
+  @Input() customActions: { icon: string, label: string, action: (model: T) => void }[] = [];
+  @Input() allowEditing = true;
 
   paginationData: PaginationData = {};
   items: T[] = [];

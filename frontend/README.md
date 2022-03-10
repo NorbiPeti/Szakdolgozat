@@ -1,14 +1,24 @@
 # Szakdolgozat
+
 Egy webalkalmazás, amely nyomonköveti egy-egy kurzus követelményeinek teljesitését oktatók és hallgatók számára.
 
+## Adatok
+
+### Kurzus
+
+Egy kurzus egy adott tárgy egy adott félévben egy adott csoporttal.
+
 ## Szerepkörök
+
 Csak bejelentkezett felhasználók férhetnek hozzá bármilyen adathoz. A saját adataikat mindig tudják módositani.
 
 ### Admin
+
 * Teljes jogosultsága van az adatokhoz, kivéve a felhasználók adatait
 * Hozzá tud rendelni más felhasználókat szerepkörökhöz egy-egy kurzus kapcsán
 
 ### Hallgató
+
 * Az adott kurzushoz tartozó adatokat csak megtekinteni tudja
 
 ### Oktató

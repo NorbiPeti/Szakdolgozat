@@ -1,4 +1,6 @@
 <app-list apiPath="/subjects" [itemType]="itemType" allowNew="true" [columns]="[
     {title: 'Név', prop: 'name'},
     {title: 'Leirás', prop: 'description'}
-  ]"></app-list>
+  ]" [customActions]="[
+  {icon: 'chevron_right', label: 'Kurzusok', action: listCourses}
+]"></app-list>

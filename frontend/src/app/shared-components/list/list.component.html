@@ -2,5 +2,6 @@
   <button mat-raised-button color="primary" (click)="newItem()">Hozzáadás</button>
 </div>
 <app-table [items]="items" (pageChange)="handlePageChange($event)" [paginationData]="paginationData" [columns]="columns"
-           [loading]="loading" (editItem)="editItem($event)">
+           [loading]="loading" (editItem)="editItem($event)" [customActions]="customActions"
+           [allowEditing]="allowEditing">
 </app-table>

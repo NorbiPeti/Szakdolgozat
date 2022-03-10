@@ -7,3 +7,4 @@ export * from './user-course.controller';
 export * from './course-requirement.controller';
 export * from './course-requirement.controller';
 export * from './subject.controller';
+export * from './course.controller';

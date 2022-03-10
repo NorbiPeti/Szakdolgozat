@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PaginationData } from '../../utility/pagination-data';
 import { PageEvent } from '@angular/material/paginator';
 
@@ -14,6 +14,8 @@ export class TableComponent<T> implements OnInit {
   @Input() loading = false;
   @Input() columns: { title: string, prop: string }[] = [];
   @Input() paginationData: PaginationData = {page: 1, limit: 10};
+  @Input() customActions: { icon: string, label: string, action: (model: T) => void }[] = [];
+  @Input() allowEditing = true;
 
   @Output() pageChange = new EventEmitter<PageEvent>();
   @Output() editItem = new EventEmitter<T>();
