@@ -12,7 +12,7 @@ const routes: Routes = [
   {path: '', component: SubjectListComponent, data: {title: 'Tárgyak'} as RouteData},
   {path: ':id', component: SubjectEditComponent, data: {title: 'Szerkesztés'}},
   {
-    path: ':subjectId/courses', children: [
+    path: ':subjectId/courses', data: {title: 'Kurzusok'}, children: [
       {path: ':id', component: CourseEditComponent, data: {title: 'Szerkesztés'} as RouteData},
       {path: '', component: CourseListComponent, data: {title: 'Kurzusok'}}
     ]

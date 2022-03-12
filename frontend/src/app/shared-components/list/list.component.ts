@@ -37,10 +37,11 @@ export class ListComponent<T extends Model> implements OnInit {
   async getItems(limit: number, page: number): Promise<void> {
     try {
       this.loading = true;
-      const total = await this.api.requestItemCount(this.apiPath);
+      if (!this.paginationData.total) {
+        this.paginationData.total = await this.api.requestItemCount(this.apiPath);
+      }
       this.paginationData.page = page;
       this.paginationData.limit = limit;
-      this.paginationData.total = total;
       this.items = await this.api.requestPage<T>(this.apiPath, limit, page);
     } finally {
       this.loading = false;
@@ -53,6 +54,6 @@ export class ListComponent<T extends Model> implements OnInit {
   }
 
   async newItem(): Promise<void> {
-   await this.router.navigate([this.router.url, 'new']);
+    await this.router.navigate([this.router.url, 'new']);
   }
 }

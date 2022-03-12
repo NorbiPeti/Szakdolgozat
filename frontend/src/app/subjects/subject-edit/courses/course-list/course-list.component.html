@@ -1,3 +1,4 @@
-<app-list [apiPath]="'/subjects/'+subjectId+'/courses'" [itemType]="itemType" allowNew="true" [columns]="[
- {prop: 'semester', title: 'Félév'}
+<app-list #list [apiPath]="'/subjects/'+subjectId+'/courses'" [itemType]="itemType" allowNew="true" [columns]="[
+ {prop: 'semester', title: 'Félév'},
+ {prop: 'alias', title: 'Név'}
 ]"></app-list>

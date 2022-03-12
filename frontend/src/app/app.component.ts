@@ -31,6 +31,8 @@ export class AppComponent implements OnInit {
 
   pageTitle: string;
 
+  private activeRouteTitle: string;
+
   constructor(private breakpointObserver: BreakpointObserver, public loginService: LoginService, private api: ApiService,
               private router: Router, private login: LoginService, private activeRoute: ActivatedRoute,
               private title: Title) {
@@ -102,7 +104,11 @@ export class AppComponent implements OnInit {
         this.pageTitle = 'Szakdolgozat';
         return this.title.setTitle('Szakdolgozat');
       }
-      let pageTitle = routeParts.reverse().map(part => part.title).reduce((partA, partI) => `${partA} > ${partI}`);
+      const titleParts = routeParts.reverse().map(part => part.title);
+      if (this.activeRouteTitle) {
+        titleParts[titleParts.length - 1] = this.activeRouteTitle;
+      }
+      let pageTitle = titleParts.reduce((partA, partI) => `${partA} > ${partI}`);
       this.pageTitle = pageTitle;
       pageTitle += ` | Szakdolgozat`;
       this.title.setTitle(pageTitle);
@@ -117,7 +123,24 @@ export class AppComponent implements OnInit {
   getMenuItems(): MenuItem[] {
     return this.menu.filter(item => item.requiredRole === 'admin' ? this.login.user?.isAdmin : true); // TODO: Roles
   }
+
+  routeActivated($event: any): void {
+    if (this.isCustomTitleComponent($event)) {
+      this.activeRouteTitle = $event.getPageTitle();
+    } else {
+      this.activeRouteTitle = null;
+    }
+  }
+
+  isCustomTitleComponent(obj: any): obj is CustomTitleComponent {
+    return obj?.getPageTitle instanceof Function;
+  }
+
 }
 
 type MenuItem = { path: string, requiredRole: UserRole | 'admin', title?: string };
 type RouteSegment = { title: string, url: string };
+
+export interface CustomTitleComponent {
+  getPageTitle(): string;
+}

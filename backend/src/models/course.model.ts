@@ -1,4 +1,4 @@
-import { Entity, model, property, belongsTo, hasMany } from '@loopback/repository';
+import { belongsTo, Entity, hasMany, model, property } from '@loopback/repository';
 import { Subject } from './subject.model';
 import { User } from './user.model';
 import { CourseUser } from './course-user.model';
@@ -18,6 +18,12 @@ export class Course extends Entity {
         required: true,
     })
     semester: string;
+
+    @property({
+        type: 'string',
+        required: true,
+    })
+    alias: string;
 
     @belongsTo(() => Subject)
     subjectId: number;
