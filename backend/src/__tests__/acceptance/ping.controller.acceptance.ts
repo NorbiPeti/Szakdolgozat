@@ -1,4 +1,4 @@
-import {Client, expect} from '@loopback/testlab';
+/*import {Client, expect} from '@loopback/testlab';
 import {SzakdolgozatBackendApplication} from '../..';
 import {setupApplication} from './test-helper';
 
@@ -19,3 +19,4 @@ describe('PingController', () => {
     expect(res.body).to.containEql({greeting: 'Hello from LoopBack'});
   });
 });
+*/

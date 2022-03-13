@@ -1,4 +1,4 @@
-import {SzakdolgozatBackendApplication} from '../..';
+/*import {SzakdolgozatBackendApplication} from '../..';
 import {
   createRestAppClient,
   givenHttpServerConfig,
@@ -30,3 +30,4 @@ export interface AppWithClient {
   app: SzakdolgozatBackendApplication;
   client: Client;
 }
+*/

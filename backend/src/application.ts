@@ -1,52 +1,31 @@
-import {BootMixin} from '@loopback/boot';
-import {ApplicationConfig} from '@loopback/core';
-import {
-  RestExplorerBindings,
-  RestExplorerComponent,
-} from '@loopback/rest-explorer';
-import {RepositoryMixin} from '@loopback/repository';
-import {RestApplication} from '@loopback/rest';
-import {ServiceMixin} from '@loopback/service-proxy';
-import path from 'path';
-import {MySequence} from './sequence';
-import {AuthenticationComponent} from '@loopback/authentication';
-import {JWTAuthenticationComponent, UserServiceBindings} from '@loopback/authentication-jwt';
-import {SzakdolgozatUserService} from './services';
+import { BootMixin } from '@loopback/boot';
+import { Application, ApplicationConfig } from '@loopback/core';
+import { RepositoryMixin } from '@loopback/repository';
+import { ServiceMixin } from '@loopback/service-proxy';
+import { AuthenticationComponent } from '@loopback/authentication';
+import { JWTAuthenticationComponent, UserServiceBindings } from '@loopback/authentication-jwt';
+import { SzakdolgozatUserService } from './services';
+import { GraphQLServer } from '@loopback/graphql';
 
-export {ApplicationConfig};
+export { ApplicationConfig };
 
 export class SzakdolgozatBackendApplication extends BootMixin(
-  ServiceMixin(RepositoryMixin(RestApplication)),
+    ServiceMixin(RepositoryMixin(Application)),
 ) {
-  constructor(options: ApplicationConfig = {}) {
-    super(options);
+    gqlServer: GraphQLServer;
 
-    // Set up the custom sequence
-    this.sequence(MySequence);
+    constructor(options: ApplicationConfig = {}) {
+        super(options);
 
-    // Set up default home page
-    this.static('/', path.join(__dirname, '../public'));
+        const server = this.server(GraphQLServer);
+        this.configure(server.key).to({host: process.env.HOST, port: process.env.PORT});
+        this.getServer(GraphQLServer).then(s => this.gqlServer = s);
 
-    // Customize @loopback/rest-explorer configuration here
-    this.configure(RestExplorerBindings.COMPONENT).to({
-      path: '/explorer',
-    });
-    this.component(RestExplorerComponent);
+        // Authentication
+        this.component(AuthenticationComponent);
+        this.component(JWTAuthenticationComponent);
+        this.service(SzakdolgozatUserService, UserServiceBindings.USER_SERVICE);
 
-    // Authentication
-    this.component(AuthenticationComponent);
-    this.component(JWTAuthenticationComponent);
-    this.service(SzakdolgozatUserService, UserServiceBindings.USER_SERVICE);
-
-    this.projectRoot = __dirname;
-    // Customize @loopback/boot Booter Conventions here
-    this.bootOptions = {
-      controllers: {
-        // Customize ControllerBooter Conventions here
-        dirs: ['controllers'],
-        extensions: ['.controller.js'],
-        nested: true,
-      },
-    };
-  }
+        this.projectRoot = __dirname;
+    }
 }

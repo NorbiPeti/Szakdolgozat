@@ -105,7 +105,7 @@ export class AppComponent implements OnInit {
         return this.title.setTitle('Szakdolgozat');
       }
       const titleParts = routeParts.reverse().map(part => part.title);
-      if (this.activeRouteTitle) {
+      if (this.activeRouteTitle) { // TODO: Get title parts from parent components even if parent wasn't opened
         titleParts[titleParts.length - 1] = this.activeRouteTitle;
       }
       let pageTitle = titleParts.reduce((partA, partI) => `${partA} > ${partI}`);

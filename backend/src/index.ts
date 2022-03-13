@@ -1,4 +1,4 @@
-import {ApplicationConfig, SzakdolgozatBackendApplication} from './application';
+import { ApplicationConfig, SzakdolgozatBackendApplication } from './application';
 
 export * from './application';
 
@@ -8,7 +8,7 @@ export async function main(options: ApplicationConfig = {}) {
   await app.migrateSchema({existingSchema: 'alter'});
   await app.start();
 
-  const url = app.restServer.url;
+  const url = app.gqlServer.httpServer?.url;
   console.log(`Server is running at ${url}`);
   console.log(`Try ${url}/ping`);
 
