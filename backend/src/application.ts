@@ -6,6 +6,7 @@ import { AuthenticationComponent } from '@loopback/authentication';
 import { JWTAuthenticationComponent, UserServiceBindings } from '@loopback/authentication-jwt';
 import { SzakdolgozatUserService } from './services';
 import { GraphQLServer } from '@loopback/graphql';
+import { UserResolver } from './graphql-resolvers/user-resolver';
 
 export { ApplicationConfig };
 
@@ -18,8 +19,11 @@ export class SzakdolgozatBackendApplication extends BootMixin(
         super(options);
 
         const server = this.server(GraphQLServer);
-        this.configure(server.key).to({host: process.env.HOST, port: process.env.PORT});
-        this.getServer(GraphQLServer).then(s => this.gqlServer = s);
+        this.configure(server.key).to({host: process.env.HOST ?? '0.0.0.0', port: process.env.PORT ?? 3000});
+        this.getServer(GraphQLServer).then(s => {
+            this.gqlServer = s;
+            s.resolver(UserResolver);
+        });
 
         // Authentication
         this.component(AuthenticationComponent);
@@ -27,5 +31,12 @@ export class SzakdolgozatBackendApplication extends BootMixin(
         this.service(SzakdolgozatUserService, UserServiceBindings.USER_SERVICE);
 
         this.projectRoot = __dirname;
+        this.bootOptions = {
+            graphqlResolvers: {
+                dirs: ['graphql-resolvers'],
+                extensions: ['js'],
+                nested: true
+            }
+        };
     }
 }
