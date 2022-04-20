@@ -2,47 +2,24 @@ import { Entity, hasMany, model, property } from '@loopback/repository';
 import { Course } from './course.model';
 import { CourseUser } from './course-user.model';
 import { field, objectType } from '@loopback/graphql';
+import { UserProperties } from '../graphql-types/user';
 
 @model()
 @objectType()
 export class User extends Entity {
-    @property({
-        type: 'number',
-        id: true,
-        generated: true,
-    })
+    @property(UserProperties.id)
     @field()
     id?: number;
 
-    @property({
-        type: 'string',
-        required: true,
-        jsonSchema: {
-            pattern: /[A-Za-z0-9.+_-]+@[A-Za-z.-_]*(u-szeged.hu)|(szte.hu)/.source
-        }
-    })
+    @property(UserProperties.email)
     @field()
     email: string;
 
-    @property({
-        type: 'string',
-        required: true,
-        jsonSchema: {
-            pattern: /([A-Za-z-.]+ )+[A-Za-z-.]+/.source
-        }
-    })
+    @property(UserProperties.name)
     @field()
     name: string;
 
-    @property({
-        type: 'string',
-        required: true,
-        jsonSchema: {
-            minLength: 8,
-            maxLength: 255
-        },
-        hidden: true
-    })
+    @property(UserProperties.password)
     @field()
     password: string;
 

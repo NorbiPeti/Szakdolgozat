@@ -1,4 +1,4 @@
-import { arg, GraphQLBindings, mutation, query, resolver, ResolverData } from '@loopback/graphql';
+import { arg, authorized, GraphQLBindings, Int, mutation, query, resolver, ResolverData } from '@loopback/graphql';
 import { User } from '../models';
 import { repository } from '@loopback/repository';
 import { UserRepository } from '../repositories';
@@ -10,6 +10,8 @@ import { SecurityBindings, UserProfile } from '@loopback/security';
 import { genSalt, hash } from 'bcryptjs';
 import { UserRegisterInput } from '../graphql-types/input/user-register.input';
 import { validated } from '../helpers';
+import { LoginResult } from '../graphql-types/user';
+import { UserUpdateInput } from '../graphql-types/input/user-update.input';
 
 @resolver(of => User)
 export class UserResolver {
@@ -39,20 +41,10 @@ export class UserResolver {
         return (await this.userRepository.find())[0];
     }
 
-    /*@mutation(returns => LoginResult)
-    async login(
-        @requestBody({
-            description: 'The input of login function',
-            required: true,
-            content: {
-                'application/json': {
-                    schema: getModelSchemaRef(User, {exclude: ['id', 'isAdmin', 'name']})
-                },
-            }
-        }) credentials: Pick<User, 'email' | 'password'>,
-    ): Promise<{ token: string, user: Omit<User, 'id' | 'password'> }> {
+    @mutation(returns => LoginResult)
+    async login(@arg('email') email: string, @arg('password') password: string): Promise<LoginResult> {
         // ensure the user exists, and the password is correct
-        const user = await this.userService.verifyCredentials(credentials);
+        const user = await this.userService.verifyCredentials({email, password});
         // convert a User object into a UserProfile object (reduced set of properties)
         const userProfile = this.userService.convertToUserProfile(user);
 
@@ -61,16 +53,11 @@ export class UserResolver {
         return {token, user};
     }
 
-    @post('/users/logout', {
-        responses: {
-            '204': {
-                description: 'Logged out',
-            },
-        },
-    })
-    @authenticate('jwt')
-    async logout(@inject(RestBindings.Http.REQUEST) request: Request): Promise<void> {
-        const split = request.headers.authorization?.split(' ');
+    @authorized()
+    @mutation(returns => Boolean)
+    async logout(@inject(GraphQLBindings.RESOLVER_DATA) request: any): Promise<boolean> {
+        console.log('request:', request); //TODO
+        const split = request.headers.get('Authorization')?.split(' ');
         if (split && split.length > 1) {
             if (this.jwtService.revokeToken) {
                 await this.jwtService.revokeToken(split[1]);
@@ -78,107 +65,38 @@ export class UserResolver {
                 console.error('Cannot revoke token');
             }
         }
+        return true;
     }
 
-    @get('/users/count')
-    @response(200, {
-        description: 'User model count',
-        content: {'application/json': {schema: CountSchema}},
-    })
-    @authenticate('jwt')
-    async count(
-        @param.where(User) where?: Where<User>,
-    ): Promise<Count> {
-        return this.userRepository.count(where);
+    @authorized()
+    @query(returns => [User])
+    async find(user: Partial<User>): Promise<User[]> {
+        return this.userRepository.find({}); //TODO
     }
 
-    @get('/users')
-    @response(200, {
-        description: 'Array of User model instances',
-        content: {
-            'application/json': {
-                schema: {
-                    type: 'array',
-                    items: getModelSchemaRef(User, {includeRelations: true}),
-                },
-            },
-        },
-    })
-    @authenticate('jwt')
-    async find(
-        @param.filter(User) filter?: Filter<User>,
-    ): Promise<User[]> {
-        return this.userRepository.find(filter);
+    @authorized()
+    @query(returns => User)
+    async findById(@arg('id', returns => Int) id: number): Promise<User> {
+        return this.userRepository.findById(id);
     }
 
-    @patch('/users')
-    @response(200, {
-        description: 'User PATCH success count',
-        content: {'application/json': {schema: CountSchema}},
-    })
-    @authenticate('jwt')
-    async updateAll(
-        @requestBody({
-            content: {
-                'application/json': {
-                    schema: getModelSchemaRef(User, {partial: true}),
-                },
-            },
-        })
-            user: User,
-        @param.where(User) where?: Where<User>,
-    ): Promise<Count> {
-        return this.userRepository.updateAll(user, where);
-    }
-
-    @get('/users/{id}')
-    @response(200, {
-        description: 'User model instance',
-        content: {
-            'application/json': {
-                schema: getModelSchemaRef(User, {includeRelations: true}),
-            },
-        },
-    })
-    @authenticate('jwt')
-    async findById(
-        @param.path.number('id') id: number,
-        @param.filter(User, {exclude: 'where'}) filter?: FilterExcludingWhere<User>
-    ): Promise<User> {
-        return this.userRepository.findById(id, filter);
-    }
-
-    @patch('/users/{id}')
-    @response(204, {
-        description: 'User PATCH success',
-    })
-    @authenticate('jwt')
-    async updateById(
-        @param.path.number('id') id: number,
-        @requestBody({
-            content: {
-                'application/json': {
-                    schema: getModelSchemaRef(User, {partial: true}),
-                },
-            },
-        })
-            user: User,
-    ): Promise<void> {
-        if (id === +this.user.id) {
+    @authorized()
+    @mutation(returns => Boolean)
+    async updateById(@arg('id', returns => Int) id: number, @arg('user') user: UserUpdateInput): Promise<boolean> {
+        if (id === +this.user?.id) { //TODO: this.user
             const loggedInUser = await this.userService.findUserById(this.user.id);
             if (user.isAdmin !== undefined && loggedInUser.isAdmin !== user.isAdmin) {
-                throw new HttpErrors.BadRequest('Cannot change admin status of self');
+                throw new Error('Cannot change admin status of self');
             }
         }
         await this.userRepository.updateById(id, user);
+        return true;
     }
 
-    @del('/users/{id}')
-    @response(204, {
-        description: 'User DELETE success',
-    })
-    @authenticate('jwt')
-    async deleteById(@param.path.number('id') id: number): Promise<void> {
+    @authorized()
+    @mutation(returns => Boolean)
+    async deleteById(id: number): Promise<Boolean> {
         await this.userRepository.deleteById(id);
-    }*/
+        return true;
+    }
 }
