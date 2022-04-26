@@ -2,10 +2,15 @@ import { BootMixin } from '@loopback/boot';
 import { Application, ApplicationConfig } from '@loopback/core';
 import { RepositoryMixin } from '@loopback/repository';
 import { ServiceMixin } from '@loopback/service-proxy';
-import { AuthenticationComponent } from '@loopback/authentication';
-import { JWTAuthenticationComponent, UserServiceBindings } from '@loopback/authentication-jwt';
+import { AuthenticationBindings, AuthenticationComponent } from '@loopback/authentication';
+import {
+    JWTAuthenticationComponent,
+    JWTAuthenticationStrategy,
+    TokenServiceBindings,
+    UserServiceBindings
+} from '@loopback/authentication-jwt';
 import { SzakdolgozatUserService } from './services';
-import { GraphQLServer } from '@loopback/graphql';
+import { GraphQLBindings, GraphQLServer } from '@loopback/graphql';
 import { UserResolver } from './graphql-resolvers/user-resolver';
 
 export { ApplicationConfig };
@@ -28,6 +33,16 @@ export class SzakdolgozatBackendApplication extends BootMixin(
         // Authentication
         this.component(AuthenticationComponent);
         this.component(JWTAuthenticationComponent);
+        this.get(TokenServiceBindings.TOKEN_SERVICE).then(tokenService => {
+            this.bind(AuthenticationBindings.STRATEGY).to(new JWTAuthenticationStrategy(tokenService));
+        });
+        this.bind(GraphQLBindings.GRAPHQL_AUTH_CHECKER).to(async (resolverData, roles) => {
+            const authenticate = await this.get(AuthenticationBindings.AUTH_ACTION);
+            const res = await authenticate((<any> resolverData.context).req);
+            console.log('Res: ', res);
+            return true;
+        });
+
         this.service(SzakdolgozatUserService, UserServiceBindings.USER_SERVICE);
 
         this.projectRoot = __dirname;
