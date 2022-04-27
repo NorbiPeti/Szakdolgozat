@@ -57,11 +57,13 @@ export class UserResolver {
 
     @authorized()
     @mutation(returns => Boolean)
-    async logout(@inject(SzakdolgozatBindings.AUTH_TOKEN) token: string): Promise<boolean> {
-        console.log('Logout service: ', token);
-        console.log('Context: ', this.context?.name);
-        //console.log('token:', this.authService.receivedToken); //TODO
-        //await this.jwtService.revokeToken?.(this.authService.receivedToken);
+    async logout(): Promise<boolean> {
+        const token = await this.context.get(SzakdolgozatBindings.AUTH_TOKEN);
+        if (this.jwtService.revokeToken) {
+            await this.jwtService.revokeToken(token);
+        } else {
+            console.error('Cannot revoke token');
+        }
         return true;
     }
 

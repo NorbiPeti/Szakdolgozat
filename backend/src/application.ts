@@ -9,10 +9,9 @@ import {
     TokenServiceBindings,
     UserServiceBindings
 } from '@loopback/authentication-jwt';
-import { AuthService, SzakdolgozatUserService } from './services';
+import { SzakdolgozatUserService } from './services';
 import { GraphQLBindings, GraphQLServer } from '@loopback/graphql';
 import { UserResolver } from './graphql-resolvers/user-resolver';
-import { SzakdolgozatBindings } from './bindings';
 import { SzakdolgozatAuthChecker } from './szakdolgozat-auth-checker';
 
 export { ApplicationConfig };
@@ -38,10 +37,9 @@ export class SzakdolgozatBackendApplication extends BootMixin(
         this.get(TokenServiceBindings.TOKEN_SERVICE).then(tokenService => {
             this.bind(AuthenticationBindings.STRATEGY).to(new JWTAuthenticationStrategy(tokenService));
         });
-        this.bind(GraphQLBindings.GRAPHQL_AUTH_CHECKER).toProvider(SzakdolgozatAuthChecker);
+        this.bind(GraphQLBindings.GRAPHQL_AUTH_CHECKER).toDynamicValue(SzakdolgozatAuthChecker);
 
         this.service(SzakdolgozatUserService, UserServiceBindings.USER_SERVICE);
-        this.service(AuthService, SzakdolgozatBindings.AUTH_SERVICE);
 
         this.projectRoot = __dirname;
         this.bootOptions = {
