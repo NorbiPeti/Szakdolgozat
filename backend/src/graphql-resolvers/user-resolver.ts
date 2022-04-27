@@ -3,7 +3,7 @@ import { User } from '../models';
 import { repository } from '@loopback/repository';
 import { UserRepository } from '../repositories';
 import { inject } from '@loopback/core';
-import { SzakdolgozatUserService } from '../services';
+import { AuthService, SzakdolgozatUserService } from '../services';
 import { TokenServiceBindings, UserServiceBindings } from '@loopback/authentication-jwt';
 import { TokenService } from '@loopback/authentication';
 import { SecurityBindings, UserProfile } from '@loopback/security';
@@ -12,6 +12,7 @@ import { UserRegisterInput } from '../graphql-types/input/user-register.input';
 import { validated } from '../helpers';
 import { LoginResult } from '../graphql-types/user';
 import { UserUpdateInput } from '../graphql-types/input/user-update.input';
+import { SzakdolgozatBindings } from '../bindings';
 
 @resolver(of => User)
 export class UserResolver {
@@ -20,8 +21,10 @@ export class UserResolver {
         @inject(UserServiceBindings.USER_SERVICE) private readonly userService: SzakdolgozatUserService,
         @inject(GraphQLBindings.RESOLVER_DATA) private readonly resolverData: ResolverData,
         @inject(TokenServiceBindings.TOKEN_SERVICE) public jwtService: TokenService,
-        @inject(SecurityBindings.USER, {optional: true}) public user: UserProfile
+        @inject(SecurityBindings.USER, {optional: true}) public user: UserProfile,
+        @inject(SzakdolgozatBindings.AUTH_SERVICE) private authService: AuthService
     ) {
+        console.log('Auth service', authService);
     }
 
     @mutation(returns => User)
@@ -55,16 +58,10 @@ export class UserResolver {
 
     @authorized()
     @mutation(returns => Boolean)
-    async logout(@inject(GraphQLBindings.RESOLVER_DATA) request: any): Promise<boolean> {
-        console.log('request:', request); //TODO
-        const split = request.headers.get('Authorization')?.split(' ');
-        if (split && split.length > 1) {
-            if (this.jwtService.revokeToken) {
-                await this.jwtService.revokeToken(split[1]);
-            } else {
-                console.error('Cannot revoke token');
-            }
-        }
+    async logout(): Promise<boolean> {
+        console.log('Logout service: ', this.authService);
+        console.log('token:', this.authService.receivedToken); //TODO
+        await this.jwtService.revokeToken?.(this.authService.receivedToken);
         return true;
     }
 

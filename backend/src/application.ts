@@ -1,5 +1,5 @@
 import { BootMixin } from '@loopback/boot';
-import { Application, ApplicationConfig } from '@loopback/core';
+import { Application, ApplicationConfig, BindingScope } from '@loopback/core';
 import { RepositoryMixin } from '@loopback/repository';
 import { ServiceMixin } from '@loopback/service-proxy';
 import { AuthenticationBindings, AuthenticationComponent } from '@loopback/authentication';
@@ -9,9 +9,10 @@ import {
     TokenServiceBindings,
     UserServiceBindings
 } from '@loopback/authentication-jwt';
-import { SzakdolgozatUserService } from './services';
+import { AuthService, SzakdolgozatUserService } from './services';
 import { GraphQLBindings, GraphQLServer } from '@loopback/graphql';
 import { UserResolver } from './graphql-resolvers/user-resolver';
+import { SzakdolgozatBindings } from './bindings';
 
 export { ApplicationConfig };
 
@@ -36,14 +37,11 @@ export class SzakdolgozatBackendApplication extends BootMixin(
         this.get(TokenServiceBindings.TOKEN_SERVICE).then(tokenService => {
             this.bind(AuthenticationBindings.STRATEGY).to(new JWTAuthenticationStrategy(tokenService));
         });
-        this.bind(GraphQLBindings.GRAPHQL_AUTH_CHECKER).to(async (resolverData, roles) => {
-            const authenticate = await this.get(AuthenticationBindings.AUTH_ACTION);
-            const res = await authenticate((<any> resolverData.context).req);
-            console.log('Res: ', res);
-            return true;
-        });
 
         this.service(SzakdolgozatUserService, UserServiceBindings.USER_SERVICE);
+        this.service(AuthService, {defaultScope: BindingScope.REQUEST, key: SzakdolgozatBindings.AUTH_SERVICE});
+        this.get(SzakdolgozatBindings.AUTH_SERVICE).then(service => this.bind(GraphQLBindings.GRAPHQL_AUTH_CHECKER)
+            .to((resolverData, roles) => service.authUser(resolverData, roles)));
 
         this.projectRoot = __dirname;
         this.bootOptions = {
