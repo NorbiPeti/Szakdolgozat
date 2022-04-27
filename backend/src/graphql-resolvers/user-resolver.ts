@@ -2,8 +2,8 @@ import { arg, authorized, GraphQLBindings, Int, mutation, query, resolver, Resol
 import { User } from '../models';
 import { repository } from '@loopback/repository';
 import { UserRepository } from '../repositories';
-import { inject } from '@loopback/core';
-import { AuthService, SzakdolgozatUserService } from '../services';
+import { Context, inject } from '@loopback/core';
+import { SzakdolgozatUserService } from '../services';
 import { TokenServiceBindings, UserServiceBindings } from '@loopback/authentication-jwt';
 import { TokenService } from '@loopback/authentication';
 import { SecurityBindings, UserProfile } from '@loopback/security';
@@ -22,9 +22,8 @@ export class UserResolver {
         @inject(GraphQLBindings.RESOLVER_DATA) private readonly resolverData: ResolverData,
         @inject(TokenServiceBindings.TOKEN_SERVICE) public jwtService: TokenService,
         @inject(SecurityBindings.USER, {optional: true}) public user: UserProfile,
-        @inject(SzakdolgozatBindings.AUTH_SERVICE) private authService: AuthService
+        @inject.context() private context: Context
     ) {
-        console.log('Auth service', authService);
     }
 
     @mutation(returns => User)
@@ -58,10 +57,11 @@ export class UserResolver {
 
     @authorized()
     @mutation(returns => Boolean)
-    async logout(): Promise<boolean> {
-        console.log('Logout service: ', this.authService);
-        console.log('token:', this.authService.receivedToken); //TODO
-        await this.jwtService.revokeToken?.(this.authService.receivedToken);
+    async logout(@inject(SzakdolgozatBindings.AUTH_TOKEN) token: string): Promise<boolean> {
+        console.log('Logout service: ', token);
+        console.log('Context: ', this.context?.name);
+        //console.log('token:', this.authService.receivedToken); //TODO
+        //await this.jwtService.revokeToken?.(this.authService.receivedToken);
         return true;
     }
 
