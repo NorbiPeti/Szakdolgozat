@@ -10,6 +10,12 @@ export class RevToken extends Entity {
   })
   token: string;
 
+  @property({
+    type: Date,
+    required: true
+  })
+  created: Date;
+
 
   constructor(data?: Partial<RevToken>) {
     super(data);

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Type } from '@angular/core';
-import { ApiService } from '../../api.service';
+import { ApiService } from '../../services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Model } from '../../model/model';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';

@@ -8,7 +8,8 @@
     "buildProd": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "gql": "graphql-codegen --config graphql.config.js"
   },
   "private": true,
   "dependencies": {
@@ -23,7 +24,16 @@
     "@angular/platform-browser": "^11.0.4",
     "@angular/platform-browser-dynamic": "^11.0.4",
     "@angular/router": "^11.0.4",
+    "@apollo/client": "^3.0.0",
+    "@graphql-codegen/cli": "^2.6.2",
+    "@graphql-codegen/introspection": "^2.1.1",
+    "@graphql-codegen/typescript": "^2.4.8",
+    "@graphql-codegen/typescript-apollo-angular": "^3.4.7",
+    "@graphql-codegen/typescript-operations": "^2.3.5",
+    "@types/react": "^18.0.8",
+    "apollo-angular": "^2.6.0",
     "firebase": "^8.2.0",
+    "graphql": "^15.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"

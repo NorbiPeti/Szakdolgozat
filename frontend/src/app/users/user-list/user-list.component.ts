@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../../model/user.model';
+import { UserResult } from '../../services/graphql';
 
 @Component({
   selector: 'app-user-list',
@@ -7,7 +7,7 @@ import { User } from '../../model/user.model';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
-  itemType = User;
+  itemType: UserResult;
 
   constructor() {
   }

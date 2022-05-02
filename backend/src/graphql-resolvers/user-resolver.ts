@@ -1,7 +1,7 @@
 import { arg, authorized, GraphQLBindings, Int, mutation, query, resolver, ResolverData } from '@loopback/graphql';
 import { User } from '../models';
 import { repository } from '@loopback/repository';
-import { UserRepository } from '../repositories';
+import { RevTokenRepository, UserRepository } from '../repositories';
 import { Context, inject } from '@loopback/core';
 import { SzakdolgozatUserService } from '../services';
 import { TokenServiceBindings, UserServiceBindings } from '@loopback/authentication-jwt';
@@ -18,6 +18,7 @@ import { SzakdolgozatBindings } from '../bindings';
 export class UserResolver {
     constructor(
         @repository('UserRepository') private readonly userRepository: UserRepository,
+        @repository('RevTokenRepository') private readonly revTokenRepo: RevTokenRepository,
         @inject(UserServiceBindings.USER_SERVICE) private readonly userService: SzakdolgozatUserService,
         @inject(GraphQLBindings.RESOLVER_DATA) private readonly resolverData: ResolverData,
         @inject(TokenServiceBindings.TOKEN_SERVICE) public jwtService: TokenService,
@@ -38,11 +39,6 @@ export class UserResolver {
         return this.userRepository.create(user);
     }
 
-    @query(returns => User)
-    async test(request: User): Promise<User> {
-        return (await this.userRepository.find())[0];
-    }
-
     @mutation(returns => LoginResult)
     async login(@arg('email') email: string, @arg('password') password: string): Promise<LoginResult> {
         // ensure the user exists, and the password is correct
@@ -59,10 +55,8 @@ export class UserResolver {
     @mutation(returns => Boolean)
     async logout(): Promise<boolean> {
         const token = await this.context.get(SzakdolgozatBindings.AUTH_TOKEN);
-        if (this.jwtService.revokeToken) {
-            await this.jwtService.revokeToken(token);
-        } else {
-            console.error('Cannot revoke token');
+        if (token && !(await this.revTokenRepo.count({token})).count) {
+            await this.revTokenRepo.create({token, created: new Date()});
         }
         return true;
     }

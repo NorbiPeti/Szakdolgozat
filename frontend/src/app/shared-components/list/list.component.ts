@@ -1,8 +1,7 @@
-import { Component, Input, OnInit, Type } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { PaginationData } from '../../utility/pagination-data';
-import { ApiService } from '../../api.service';
-import { Model } from '../../model/model';
+import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,10 +9,10 @@ import { Router } from '@angular/router';
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
-export class ListComponent<T extends Model> implements OnInit {
+export class ListComponent<T extends { id: number }> implements OnInit {
 
   @Input() apiPath: string;
-  @Input() itemType: Type<T>;
+  @Input() itemType: T;
   @Input() columns: { title: string, prop: keyof T }[];
   @Input() allowNew = false;
   @Input() customActions: { icon: string, label: string, action: (model: T) => void }[] = [];

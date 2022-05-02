@@ -1,22 +1,27 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../environments/environment';
-import { LoginService } from './auth/login.service';
+import { LoginService } from '../auth/login.service';
 import { Router } from '@angular/router';
+import { Apollo } from 'apollo-angular';
+import { gql } from '@apollo/client';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  constructor(private http: HttpClient, private loginService: LoginService, private router: Router) {
+  constructor(private apollo: Apollo, private loginService: LoginService, private router: Router) {
   }
 
   request(method: 'post' | 'get' | 'delete' | 'patch', url: string, body: any): Promise<any> {
-    return this.http.request(method, environment.backendUrl + url, {
-      body,
-      headers: {Authorization: 'Bearer ' + this.loginService.token}
-    }).toPromise().catch(e => {
+    const asd = this.apollo.query({
+      query: gql`
+        {
+          __typename
+        }
+      `
+      // headers: {Authorization: 'Bearer ' + this.loginService.token}
+    }).toPromise().then(res => res);
+    return asd.catch(e => {
       if (e.status === 401) {
         this.loginService.deleteToken();
         return this.router.navigateByUrl('/auth/login');

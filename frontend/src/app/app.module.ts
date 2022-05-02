@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { LoginService } from './auth/login.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthCheck } from './auth-check';
+import { GraphQLModule } from './graphql.module';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { AuthCheck } from './auth-check';
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    GraphQLModule
   ],
   providers: [
     LoginService,

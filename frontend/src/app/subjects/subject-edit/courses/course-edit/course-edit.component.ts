@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Course } from '../../../../model/course.model';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -8,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./course-edit.component.css']
 })
 export class CourseEditComponent implements OnInit {
-  itemType = Course;
+  itemType: Course;
   beforeSubmit = () => ({subjectId: +this.route.snapshot.params.subjectId});
 
   constructor(private route: ActivatedRoute) {

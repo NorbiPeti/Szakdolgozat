@@ -4,8 +4,7 @@ import { Observable } from 'rxjs';
 import { filter, map, shareReplay } from 'rxjs/operators';
 import { LoginService } from './auth/login.service';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Route, Router, Routes } from '@angular/router';
-import { ApiService } from './api.service';
-import { UserRole } from './model/user.model';
+import { ApiService } from './services/api.service';
 import { RouteData } from './app-routing.module';
 import { Title } from '@angular/platform-browser';
 
@@ -138,7 +137,7 @@ export class AppComponent implements OnInit {
 
 }
 
-type MenuItem = { path: string, requiredRole: UserRole | 'admin', title?: string };
+type MenuItem = { path: string, requiredRole: 'admin', title?: string }; // TODO: Role
 type RouteSegment = { title: string, url: string };
 
 export interface CustomTitleComponent {

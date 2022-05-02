@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { User } from '../model/user.model';
+import { LoginGQL, UserResult } from '../services/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -9,17 +9,17 @@ import { User } from '../model/user.model';
 export class LoginService {
 
   private tokenP: string;
-  private userP: User;
+  private userP: UserResult;
 
   get token(): string {
     return this.tokenP;
   }
 
-  get user(): User {
+  get user(): UserResult {
     return this.userP;
   }
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private loginService: LoginGQL) {
     this.tokenP = window.localStorage.getItem('token');
     this.userP = JSON.parse(window.localStorage.getItem('user'));
   }
@@ -30,14 +30,11 @@ export class LoginService {
 
   async login(email: string, password: string): Promise<boolean> {
     try {
-      const resp = await this.http.post<{ token: string, user: User }>(environment.backendUrl + '/users/login', {
-        email,
-        password
-      }).toPromise();
-      this.tokenP = resp.token;
-      this.userP = resp.user;
-      window.localStorage.setItem('token', resp.token);
-      window.localStorage.setItem('user', JSON.stringify(resp.user));
+      const resp = await this.loginService.mutate({email, password}).toPromise();
+      this.tokenP = resp.data.login.token;
+      this.userP = resp.data.login.user;
+      window.localStorage.setItem('token', this.tokenP);
+      window.localStorage.setItem('user', JSON.stringify(this.userP));
       return true;
     } catch (e) {
       if (e.status === 401 || e.status === 422) {
