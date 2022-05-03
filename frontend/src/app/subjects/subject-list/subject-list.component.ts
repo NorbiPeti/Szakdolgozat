@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Subject } from '../../model/subject.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, SubjectListGQL } from '../../services/graphql';
 
 @Component({
   selector: 'app-subject-list',
@@ -8,9 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./subject-list.component.css']
 })
 export class SubjectListComponent implements OnInit {
-  itemType = Subject;
 
-  constructor(private route: ActivatedRoute, private router: Router) {
+  constructor(private route: ActivatedRoute, private router: Router, public listGQL: SubjectListGQL) {
   }
 
   ngOnInit(): void {

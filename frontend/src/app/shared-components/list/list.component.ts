@@ -3,16 +3,17 @@ import { PageEvent } from '@angular/material/paginator';
 import { PaginationData } from '../../utility/pagination-data';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
+import { Query } from 'apollo-angular';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
-export class ListComponent<T extends { id: number }> implements OnInit {
+export class ListComponent<T extends { id: number }, U extends { [entityName: string]: { count: number; list: T[] } }> implements OnInit {
 
-  @Input() apiPath: string;
-  @Input() itemType: T;
+  @Input() gql: Query<U, { limit: number; offset: number }>;
+  @Input() itemType: T; // TODO: Remove
   @Input() columns: { title: string, prop: keyof T }[];
   @Input() allowNew = false;
   @Input() customActions: { icon: string, label: string, action: (model: T) => void }[] = [];
@@ -36,19 +37,19 @@ export class ListComponent<T extends { id: number }> implements OnInit {
   async getItems(limit: number, page: number): Promise<void> {
     try {
       this.loading = true;
-      if (!this.paginationData.total) {
-        this.paginationData.total = await this.api.requestItemCount(this.apiPath);
-      }
+      const {data} = await this.gql.fetch({limit, offset: (page - 1) * limit}).toPromise(); // TODO: Watch
+      const key = Object.keys(data).filter(k => k !== '__typename')[0];
+      this.paginationData.total = data[key].count;
       this.paginationData.page = page;
       this.paginationData.limit = limit;
-      this.items = await this.api.requestPage<T>(this.apiPath, limit, page);
+      this.items = data[key].list;
     } finally {
       this.loading = false;
     }
   }
 
   async editItem(item: T): Promise<void> {
-    window.localStorage.setItem(this.router.url + '/' + item.id, JSON.stringify(item));
+    window.localStorage.setItem(this.router.url + '/' + item.id, JSON.stringify(item)); // TODO: Apollo cache
     await this.router.navigate([this.router.url, item.id]);
   }
 

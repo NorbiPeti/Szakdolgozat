@@ -1,4 +1,4 @@
-import { arg, authorized, GraphQLBindings, Int, mutation, query, resolver, ResolverData } from '@loopback/graphql';
+import { arg, authorized, GraphQLBindings, ID, mutation, query, resolver, ResolverData } from '@loopback/graphql';
 import { User } from '../models';
 import { repository } from '@loopback/repository';
 import { RevTokenRepository, UserRepository } from '../repositories';
@@ -63,19 +63,19 @@ export class UserResolver {
 
     @authorized()
     @query(returns => [User])
-    async find(user: Partial<User>): Promise<User[]> {
+    async findUser(user: Partial<User>): Promise<User[]> {
         return this.userRepository.find({}); //TODO
     }
 
     @authorized()
-    @query(returns => User)
-    async findById(@arg('id', returns => Int) id: number): Promise<User> {
+    @query(returns => User, {name: 'user'})
+    async findById(@arg('id') id: number): Promise<User> {
         return this.userRepository.findById(id);
     }
 
     @authorized()
     @mutation(returns => Boolean)
-    async updateById(@arg('id', returns => Int) id: number, @arg('user') user: UserUpdateInput): Promise<boolean> {
+    async userUpdate(@arg('id', returns => ID) id: number, @arg('user') user: UserUpdateInput): Promise<boolean> {
         if (id === +this.user?.id) { //TODO: this.user
             const loggedInUser = await this.userService.findUserById(this.user.id);
             if (user.isAdmin !== undefined && loggedInUser.isAdmin !== user.isAdmin) {
@@ -88,7 +88,7 @@ export class UserResolver {
 
     @authorized()
     @mutation(returns => Boolean)
-    async deleteById(id: number): Promise<Boolean> {
+    async userDelete(id: number): Promise<Boolean> {
         await this.userRepository.deleteById(id);
         return true;
     }

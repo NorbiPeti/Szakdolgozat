@@ -33,8 +33,7 @@ export class AppComponent implements OnInit {
   private activeRouteTitle: string;
 
   constructor(private breakpointObserver: BreakpointObserver, public loginService: LoginService, private api: ApiService,
-              private router: Router, private login: LoginService, private activeRoute: ActivatedRoute,
-              private title: Title) {
+              private router: Router, private activeRoute: ActivatedRoute, private title: Title) {
   }
 
   ngOnInit(): void {
@@ -115,12 +114,12 @@ export class AppComponent implements OnInit {
   }
 
   async logout(): Promise<void> {
-    await this.api.logout();
+    await this.loginService.logout();
     await this.router.navigate(['/']);
   }
 
   getMenuItems(): MenuItem[] {
-    return this.menu.filter(item => item.requiredRole === 'admin' ? this.login.user?.isAdmin : true); // TODO: Roles
+    return this.menu.filter(item => item.requiredRole === 'admin' ? this.loginService.user?.isAdmin : true); // TODO: Roles
   }
 
   routeActivated($event: any): void {

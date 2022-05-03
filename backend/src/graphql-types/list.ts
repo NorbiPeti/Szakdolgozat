@@ -1,4 +1,5 @@
-import { field, inputType, objectType } from '@loopback/graphql';
+import { ClassType, field, inputType } from '@loopback/graphql';
+import { DefaultCrudRepository, Entity } from '@loopback/repository';
 
 @inputType()
 export class ListInput {
@@ -8,10 +9,14 @@ export class ListInput {
     limit: number;
 }
 
-@objectType()
-export class ListResponse<T> {
-    @field()
+export interface ListResponse<T> {
     count: number;
-    @field()
     list: T[];
+}
+
+export async function listResponse<T extends Entity, U extends ListResponse<T>>(repo: DefaultCrudRepository<T, number>, offset: number, limit: number, listType: ClassType<U>) {
+    const list = new listType();
+    list.list = await repo.find({offset, limit});
+    list.count = (await repo.count()).count;
+    return list;
 }

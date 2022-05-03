@@ -1,0 +1,18 @@
+query SubjectList($limit: Int!, $offset: Int!) {
+  subjects(limit: $limit, offset: $offset) {
+    list {
+      name
+      id
+      description
+    }
+    count
+  }
+}
+
+query Subject($id: ID!) {
+  subject(id: $id) {
+    id
+    name
+    description
+  }
+}

@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Course } from '../../../../model/course.model';
-import { ListComponent } from '../../../../shared-components/list/list.component';
 import { CustomTitleComponent } from '../../../../app.component';
+import { Course, SubjectGQL } from '../../../../services/graphql';
 
 @Component({
   selector: 'app-courses',
@@ -11,10 +10,9 @@ import { CustomTitleComponent } from '../../../../app.component';
 })
 export class CourseListComponent implements OnInit, CustomTitleComponent {
   subjectId: string;
-  itemType = Course;
-  @ViewChild('list') list: ListComponent<Course>;
+  itemType: Course;
 
-  constructor(route: ActivatedRoute) {
+  constructor(route: ActivatedRoute, public listGQL: SubjectGQL) {
     this.subjectId = route.snapshot.params.subjectId;
   }
 
@@ -22,6 +20,6 @@ export class CourseListComponent implements OnInit, CustomTitleComponent {
   }
 
   getPageTitle(): string {
-    return 'Custom title'; //TODO
+    return 'Custom title'; //TODO: SubjectGQL
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { LoginGQL, UserResult } from '../services/graphql';
+import { LoginGQL, LogoutGQL, UserResult } from '../services/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class LoginService {
     return this.userP;
   }
 
-  constructor(private http: HttpClient, private loginService: LoginGQL) {
+  constructor(private http: HttpClient, private loginGQL: LoginGQL, private logoutGQL: LogoutGQL) {
     this.tokenP = window.localStorage.getItem('token');
     this.userP = JSON.parse(window.localStorage.getItem('user'));
   }
@@ -30,7 +30,7 @@ export class LoginService {
 
   async login(email: string, password: string): Promise<boolean> {
     try {
-      const resp = await this.loginService.mutate({email, password}).toPromise();
+      const resp = await this.loginGQL.mutate({email, password}).toPromise();
       this.tokenP = resp.data.login.token;
       this.userP = resp.data.login.user;
       window.localStorage.setItem('token', this.tokenP);
@@ -49,5 +49,10 @@ export class LoginService {
     this.userP = null;
     window.localStorage.removeItem('token');
     window.localStorage.removeItem('user');
+  }
+
+  async logout(): Promise<void> {
+    await this.logoutGQL.mutate().toPromise();
+    this.deleteToken();
   }
 }

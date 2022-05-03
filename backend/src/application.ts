@@ -10,9 +10,11 @@ import {
     UserServiceBindings
 } from '@loopback/authentication-jwt';
 import { SzakdolgozatUserService } from './services';
-import { GraphQLBindings, GraphQLServer } from '@loopback/graphql';
-import { UserResolver } from './graphql-resolvers/user-resolver';
+import { GraphQLBindings, GraphQLServer, GraphQLServerOptions } from '@loopback/graphql';
+import { UserResolver } from './graphql-resolvers/user.resolver';
 import { SzakdolgozatAuthChecker } from './szakdolgozat-auth-checker';
+import { CourseResolver } from './graphql-resolvers/course.resolver';
+import { SubjectResolver } from './graphql-resolvers/subject.resolver';
 
 export { ApplicationConfig };
 
@@ -25,10 +27,15 @@ export class SzakdolgozatBackendApplication extends BootMixin(
         super(options);
 
         const server = this.server(GraphQLServer);
-        this.configure(server.key).to({host: process.env.HOST ?? '0.0.0.0', port: process.env.PORT ?? 3000});
+        this.configure(server.key).to(<GraphQLServerOptions> {
+            host: process.env.HOST ?? '0.0.0.0',
+            port: process.env.PORT ?? 3000
+        });
         this.getServer(GraphQLServer).then(s => {
             this.gqlServer = s;
             s.resolver(UserResolver);
+            s.resolver(CourseResolver);
+            s.resolver(SubjectResolver);
         });
 
         // Authentication

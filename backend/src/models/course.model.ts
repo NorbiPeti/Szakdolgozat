@@ -3,29 +3,35 @@ import { Subject } from './subject.model';
 import { User } from './user.model';
 import { CourseUser } from './course-user.model';
 import { Requirement } from './requirement.model';
+import { field, objectType } from '@loopback/graphql';
 
 @model()
+@objectType()
 export class Course extends Entity {
     @property({
         type: 'number',
         id: true,
         generated: true,
     })
+    @field()
     id?: number;
 
     @property({
         type: 'string',
         required: true,
     })
+    @field()
     semester: string;
 
     @property({
         type: 'string',
         required: true,
     })
+    @field()
     alias: string;
 
     @belongsTo(() => Subject)
+    @field()
     subjectId: number;
 
     @hasMany(() => User, {through: {model: () => CourseUser}})

@@ -1,24 +1,29 @@
-import { Entity, model, property, hasMany } from '@loopback/repository';
+import { Entity, hasMany, model, property } from '@loopback/repository';
 import { Course } from './course.model';
+import { field, objectType } from '@loopback/graphql';
 
 @model()
+@objectType()
 export class Subject extends Entity {
     @property({
         type: 'number',
         id: true,
         generated: true,
     })
+    @field()
     id?: number;
 
     @property({
         type: 'string',
         required: true,
     })
+    @field()
     name: string;
 
     @property({
         type: 'string',
     })
+    @field()
     description?: string;
 
     @hasMany(() => Course)

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../../model/user.model';
 import { LoginService } from '../../auth/login.service';
+import { UserResult } from '../../services/graphql';
 
 @Component({
   selector: 'app-user-edit',
@@ -8,7 +8,7 @@ import { LoginService } from '../../auth/login.service';
   styleUrls: ['./user-edit.component.css']
 })
 export class UserEditComponent implements OnInit {
-  itemType = User;
+  itemType: UserResult;
   isEditingSelf = user => user.id === this.userService.user.id;
 
   constructor(private userService: LoginService) { }
