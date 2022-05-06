@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { filter, map, shareReplay } from 'rxjs/operators';
 import { LoginService } from './auth/login.service';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Route, Router, Routes } from '@angular/router';
-import { ApiService } from './services/api.service';
 import { RouteData } from './app-routing.module';
 import { Title } from '@angular/platform-browser';
 
@@ -26,13 +25,11 @@ export class AppComponent implements OnInit {
     {path: 'subjects', requiredRole: 'admin'}
   ];
 
-  routeSegments: RouteSegment[];
-
   pageTitle: string;
 
   private activeRouteTitle: string;
 
-  constructor(private breakpointObserver: BreakpointObserver, public loginService: LoginService, private api: ApiService,
+  constructor(private breakpointObserver: BreakpointObserver, public loginService: LoginService,
               private router: Router, private activeRoute: ActivatedRoute, private title: Title) {
   }
 

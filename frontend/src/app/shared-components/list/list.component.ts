@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { PaginationData } from '../../utility/pagination-data';
-import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
 import { Query } from 'apollo-angular';
 
@@ -23,7 +22,7 @@ export class ListComponent<T extends { id: number }, U extends { [entityName: st
   items: T[] = [];
   loading = false;
 
-  constructor(private api: ApiService, private router: Router) {
+  constructor(private router: Router) {
   }
 
   ngOnInit(): void {

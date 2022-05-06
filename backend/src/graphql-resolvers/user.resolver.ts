@@ -1,4 +1,4 @@
-import { arg, authorized, GraphQLBindings, ID, mutation, query, resolver, ResolverData } from '@loopback/graphql';
+import { arg, authorized, GraphQLBindings, ID, Int, mutation, query, resolver, ResolverData } from '@loopback/graphql';
 import { User } from '../models';
 import { repository } from '@loopback/repository';
 import { RevTokenRepository, UserRepository } from '../repositories';
@@ -10,9 +10,10 @@ import { SecurityBindings, UserProfile } from '@loopback/security';
 import { genSalt, hash } from 'bcryptjs';
 import { UserRegisterInput } from '../graphql-types/input/user-register.input';
 import { validated } from '../helpers';
-import { LoginResult } from '../graphql-types/user';
+import { LoginResult, UserList } from '../graphql-types/user';
 import { UserUpdateInput } from '../graphql-types/input/user-update.input';
 import { SzakdolgozatBindings } from '../bindings';
+import { listResponse } from '../graphql-types/list';
 
 @resolver(of => User)
 export class UserResolver {
@@ -69,20 +70,26 @@ export class UserResolver {
 
     @authorized()
     @query(returns => User, {name: 'user'})
-    async findById(@arg('id') id: number): Promise<User> {
+    async findById(@arg('id', returns => ID) id: number): Promise<User> {
         return this.userRepository.findById(id);
     }
 
     @authorized()
+    @query(returns => [User])
+    async users(@arg('limit', returns => Int) limit: number, @arg('offset', returns => Int) offset: number) {
+        return await listResponse(this.userRepository, offset, limit, UserList);
+    }
+
+    @authorized()
     @mutation(returns => Boolean)
-    async userUpdate(@arg('id', returns => ID) id: number, @arg('user') user: UserUpdateInput): Promise<boolean> {
-        if (id === +this.user?.id) { //TODO: this.user
+    async userUpdate(@arg('user') user: UserUpdateInput): Promise<boolean> {
+        if (user.id === +this.user?.id) { //TODO: this.user
             const loggedInUser = await this.userService.findUserById(this.user.id);
             if (user.isAdmin !== undefined && loggedInUser.isAdmin !== user.isAdmin) {
                 throw new Error('Cannot change admin status of self');
             }
         }
-        await this.userRepository.updateById(id, user);
+        await this.userRepository.updateById(user.id, user);
         return true;
     }
 

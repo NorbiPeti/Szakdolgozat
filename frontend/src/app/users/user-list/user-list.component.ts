@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserResult } from '../../services/graphql';
+import { UserListGQL, UserResult } from '../../services/graphql';
 
 @Component({
   selector: 'app-user-list',
@@ -9,7 +9,7 @@ import { UserResult } from '../../services/graphql';
 export class UserListComponent implements OnInit {
   itemType: UserResult;
 
-  constructor() {
+  constructor(public listGQL: UserListGQL) {
   }
 
   ngOnInit(): void {

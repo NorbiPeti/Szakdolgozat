@@ -1,4 +1,4 @@
-<app-edit [itemType]="itemType" [fields]="[
+<app-edit [itemType]="itemType" [gql]="itemGQL" [updateMutation]="updateGQL" [fields]="[
   {title: 'E-mail', name: 'email'},
   {title: 'Név', name: 'name'},
   {title: 'Admin', name: 'isAdmin', readonly: isEditingSelf}

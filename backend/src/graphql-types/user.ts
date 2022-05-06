@@ -1,5 +1,6 @@
 import { User } from '../models';
-import { field, objectType } from '@loopback/graphql';
+import { field, Int, objectType } from '@loopback/graphql';
+import { ListResponse } from './list';
 
 @objectType()
 export class UserResult implements Pick<User, 'id' | 'email' | 'name' | 'isAdmin'> {
@@ -19,6 +20,14 @@ export class LoginResult {
     token: string;
     @field()
     user: UserResult;
+}
+
+@objectType()
+export class UserList implements ListResponse<UserResult> {
+    @field(returns => Int)
+    count: number;
+    @field(returns => [UserResult])
+    list: UserResult[];
 }
 
 export const UserProperties = {

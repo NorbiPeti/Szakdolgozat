@@ -13,3 +13,25 @@ mutation Login($email: String!, $password: String!) {
 mutation Logout {
   logout
 }
+
+query UserList($limit: Int!, $offset: Int!) {
+  users(limit: $limit, offset: $offset) {
+    id
+    name
+    email
+    isAdmin
+  }
+}
+
+query User($id: ID!) {
+  user(id: $id) {
+    id
+    isAdmin
+    email
+    name
+  }
+}
+
+mutation EditUser($input: UserUpdateInput!) {
+  userUpdate(user: $input)
+}

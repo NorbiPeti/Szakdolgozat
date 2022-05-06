@@ -18,6 +18,6 @@ fi
 echo "Installing packages"
 npm install
 echo "Running application"
-npm run rebuild
+npm run clean
 wait-for-it database:3306 -t 0
 npm run start:watch

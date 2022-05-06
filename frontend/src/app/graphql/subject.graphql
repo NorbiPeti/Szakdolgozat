@@ -16,3 +16,7 @@ query Subject($id: ID!) {
     description
   }
 }
+
+mutation EditSubject($input: SubjectUpdateInput!) {
+  subjectUpdate(subject: $input)
+}
