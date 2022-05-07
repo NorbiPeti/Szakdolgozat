@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CustomTitleComponent } from '../../../../app.component';
-import { Course, SubjectGQL } from '../../../../services/graphql';
+import { Course, CourseListBySubjectGQL, SubjectGQL } from '../../../../services/graphql';
 
 @Component({
   selector: 'app-courses',
@@ -12,14 +12,14 @@ export class CourseListComponent implements OnInit, CustomTitleComponent {
   subjectId: string;
   itemType: Course;
 
-  constructor(route: ActivatedRoute, public listGQL: SubjectGQL) {
+  constructor(route: ActivatedRoute, public subjectGQL: SubjectGQL, public listGQL: CourseListBySubjectGQL) {
     this.subjectId = route.snapshot.params.subjectId;
   }
 
   ngOnInit(): void {
   }
 
-  getPageTitle(): string {
-    return 'Custom title'; //TODO: SubjectGQL
+  getPageTitleVars(): object | Promise<object> {
+    return this.subjectGQL.fetch({id: this.subjectId}).toPromise().then(subject => ({subjectName: subject.data.subject.name}));
   }
 }

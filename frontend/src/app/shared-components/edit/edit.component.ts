@@ -55,6 +55,11 @@ export class EditComponent<T extends HasID, QT extends QueryResult<T>, UT extend
     } else {
       this.item = {} as T;
       this.creating = true;
+      if (!this.createMutation) {
+        alert('Nem hozható létre új elem ezzel a tipussal');
+        await this.router.navigate(['..'], {relativeTo: this.route});
+        return;
+      }
     }
     this.isLoading = false;
   }

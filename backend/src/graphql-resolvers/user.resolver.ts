@@ -75,7 +75,7 @@ export class UserResolver {
     }
 
     @authorized()
-    @query(returns => [User])
+    @query(returns => UserList)
     async users(@arg('limit', returns => Int) limit: number, @arg('offset', returns => Int) offset: number) {
         return await listResponse(this.userRepository, offset, limit, UserList);
     }

@@ -1,5 +1,5 @@
 import { repository } from '@loopback/repository';
-import { CourseRepository } from '../repositories';
+import { CourseRepository, SubjectRepository, UserRepository } from '../repositories';
 import { arg, ID, Int, mutation, query, resolver } from '@loopback/graphql';
 import { Course } from '../models';
 import { CourseUpdateInput } from '../graphql-types/input/course-update.input';
@@ -9,13 +9,20 @@ import { CourseList } from '../graphql-types/course';
 @resolver(of => Course)
 export class CourseResolver {
     constructor(
-        @repository('CourseRepository') private courseRepo: CourseRepository
+        @repository('CourseRepository') private courseRepo: CourseRepository,
+        @repository('SubjectRepository') private subjectRepo: SubjectRepository,
+        @repository('UserRepository') private userRepo: UserRepository
     ) {
     }
 
     @query(returns => CourseList)
-    async courses(@arg('offset', returns => Int) offset: number, @arg('limit', returns => Int) limit: number): Promise<ListResponse<Course>> {
-        return listResponse(this.courseRepo, offset, limit, CourseList);
+    async coursesBySubject(@arg('subject', returns => ID) subject: number, @arg('offset', returns => Int) offset: number, @arg('limit', returns => Int) limit: number): Promise<ListResponse<Course>> {
+        return listResponse(this.subjectRepo.courses(subject), offset, limit, CourseList);
+    }
+
+    @query(returns => CourseList)
+    async coursesByUser(@arg('user', returns => ID) user: number, @arg('offset', returns => Int) offset: number, @arg('limit', returns => Int) limit: number): Promise<ListResponse<Course>> {
+        return listResponse(this.userRepo.courses(user), offset, limit, CourseList);
     }
 
     @query(returns => Course)

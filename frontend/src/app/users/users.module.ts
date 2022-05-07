@@ -7,7 +7,7 @@ import { SharedComponentsModule } from '../shared-components/shared-components.m
 import { UserEditComponent } from './user-edit/user-edit.component';
 
 const routes: Routes = [
-  {path: '', component: UserListComponent, data: {title: 'Felhasználók'} as RouteData},
+  {path: '', component: UserListComponent, data: {title: ''} as RouteData},
   {path: ':id', component: UserEditComponent, data: {title: 'Szerkesztés'}}
 ];
 

@@ -16,10 +16,13 @@ mutation Logout {
 
 query UserList($limit: Int!, $offset: Int!) {
   users(limit: $limit, offset: $offset) {
-    id
-    name
-    email
-    isAdmin
+    list {
+      id
+      name
+      email
+      isAdmin
+    }
+    count
   }
 }
 

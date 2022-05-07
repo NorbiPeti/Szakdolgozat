@@ -1,0 +1,33 @@
+query CourseListBySubject($subject: ID!, $limit: Int!, $offset: Int!) {
+  coursesBySubject(subject: $subject, limit: $limit, offset: $offset) {
+    count
+    list {
+      id
+      alias
+      semester
+    }
+  }
+}
+
+query CourseListByUser($user: ID!, $limit: Int!, $offset: Int!) {
+  coursesByUser(user: $user, limit: $limit, offset: $offset) {
+    list {
+      id
+      alias
+      semester
+    }
+    count
+  }
+}
+
+query Course($id: ID!) {
+  course(id: $id) {
+    id
+    semester
+    alias
+  }
+}
+
+mutation EditCourse($input: CourseUpdateInput!) {
+  courseUpdate(course: $input)
+}

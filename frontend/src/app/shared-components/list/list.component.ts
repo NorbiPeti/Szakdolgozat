@@ -3,15 +3,18 @@ import { PageEvent } from '@angular/material/paginator';
 import { PaginationData } from '../../utility/pagination-data';
 import { Router } from '@angular/router';
 import { Query } from 'apollo-angular';
+import { ListVariableType } from '../../utility/types';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
-export class ListComponent<T extends { id: number }, U extends { [entityName: string]: { count: number; list: T[] } }> implements OnInit {
+export class ListComponent<T extends { id: number }, U extends { [entityName: string]: { count: number; list: T[] } },
+  V extends object | undefined> implements OnInit {
 
-  @Input() gql: Query<U, { limit: number; offset: number }>;
+  @Input() gql: Query<U, ListVariableType<V>>;
+  @Input() queryVariables: V;
   @Input() itemType: T; // TODO: Remove
   @Input() columns: { title: string, prop: keyof T }[];
   @Input() allowNew = false;
@@ -36,7 +39,8 @@ export class ListComponent<T extends { id: number }, U extends { [entityName: st
   async getItems(limit: number, page: number): Promise<void> {
     try {
       this.loading = true;
-      const {data} = await this.gql.fetch({limit, offset: (page - 1) * limit}).toPromise(); // TODO: Watch
+      const vars = (this.queryVariables === undefined ? {} : this.queryVariables) as V extends object ? V : {};
+      const {data} = await this.gql.fetch({...vars, limit, offset: (page - 1) * limit}).toPromise(); // TODO: Watch
       const key = Object.keys(data).filter(k => k !== '__typename')[0];
       this.paginationData.total = data[key].count;
       this.paginationData.page = page;

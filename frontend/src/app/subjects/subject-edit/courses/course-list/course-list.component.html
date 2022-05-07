@@ -1,4 +1,4 @@
-<app-list [itemType]="itemType" allowNew="true" [columns]="[
+<app-list [itemType]="itemType" allowNew="true" [gql]="listGQL" [queryVariables]="{subject: subjectId}" [columns]="[
  {prop: 'semester', title: 'Félév'},
  {prop: 'alias', title: 'Név'}
 ]"></app-list>

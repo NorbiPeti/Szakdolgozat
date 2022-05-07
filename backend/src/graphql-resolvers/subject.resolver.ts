@@ -13,7 +13,7 @@ export class SubjectResolver {
 
     @query(returns => SubjectList)
     async subjects(@arg('offset', returns => Int) offset: number, @arg('limit', returns => Int) limit: number): Promise<ListResponse<Subject>> {
-        return listResponse(this.subjectRepo, offset, limit, SubjectList);
+        return await listResponse(this.subjectRepo, offset, limit, SubjectList);
     }
 
     @query(returns => Subject)

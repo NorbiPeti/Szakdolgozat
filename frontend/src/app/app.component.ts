@@ -3,7 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { filter, map, shareReplay } from 'rxjs/operators';
 import { LoginService } from './auth/login.service';
-import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Route, Router, Routes } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Params, Route, Router, Routes } from '@angular/router';
 import { RouteData } from './app-routing.module';
 import { Title } from '@angular/platform-browser';
 
@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
 
   pageTitle: string;
 
-  private activeRouteTitle: string;
+  private activeComponentVars: object;
 
   constructor(private breakpointObserver: BreakpointObserver, public loginService: LoginService,
               private router: Router, private activeRoute: ActivatedRoute, private title: Title) {
@@ -43,7 +43,9 @@ export class AppComponent implements OnInit {
         item.title = 'NOTFOUND';
       }
     }
-    this.setPageTitle();
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
+      this.setPageTitle();
+    });
   }
 
   getRoutes(data: { path: string, routes: Routes }[]): { routes: Routes, path: string, currentRoute: Route }[] {
@@ -82,32 +84,44 @@ export class AppComponent implements OnInit {
         return routeParts;
       }
       const data = snapshot.data as RouteData;
-      if (data.title && snapshot.url.length) {
+      if (data.title) {
         routeParts.push({
           title: data.title,
-          url: snapshot.url[0].path
+          url: snapshot.url.length ? snapshot.url[0].path : undefined,
+          params: snapshot.params
         });
       }
     }
     return routeParts;
   }
 
+  getTitleParts(): string[] {
+    const routeParts = this.getRouteSegments(this.activeRoute.snapshot);
+    if (!routeParts.length) {
+      return [];
+    }
+
+    function replaceVars(replacements: object, title: string): string {
+      return Object.keys(replacements).reduce((pv, cv) => pv.replace(':' + cv, replacements[cv]), title);
+    }
+
+    let titleParts = routeParts.reverse().map(part => replaceVars(part.params, part.title));
+    if (this.activeComponentVars) {
+      titleParts = titleParts.map(part => replaceVars(this.activeComponentVars, part));
+    }
+    return titleParts.map(part => part.startsWith(':') ? '~' : part);
+  }
+
   setPageTitle(): void {
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
-      const routeParts = this.getRouteSegments(this.activeRoute.snapshot);
-      if (!routeParts.length) {
-        this.pageTitle = 'Szakdolgozat';
-        return this.title.setTitle('Szakdolgozat');
-      }
-      const titleParts = routeParts.reverse().map(part => part.title);
-      if (this.activeRouteTitle) { // TODO: Get title parts from parent components even if parent wasn't opened
-        titleParts[titleParts.length - 1] = this.activeRouteTitle;
-      }
-      let pageTitle = titleParts.reduce((partA, partI) => `${partA} > ${partI}`);
-      this.pageTitle = pageTitle;
-      pageTitle += ` | Szakdolgozat`;
-      this.title.setTitle(pageTitle);
-    });
+    const titleParts = this.getTitleParts();
+    if (!titleParts.length) {
+      this.pageTitle = 'Szakdolgozat';
+      return this.title.setTitle('Szakdolgozat');
+    }
+    let pageTitle = titleParts.reduce((partA, partI) => `${partA} > ${partI}`);
+    this.pageTitle = pageTitle;
+    pageTitle += ` | Szakdolgozat`;
+    this.title.setTitle(pageTitle);
   }
 
   async logout(): Promise<void> {
@@ -119,23 +133,25 @@ export class AppComponent implements OnInit {
     return this.menu.filter(item => item.requiredRole === 'admin' ? this.loginService.user?.isAdmin : true); // TODO: Roles
   }
 
-  routeActivated($event: any): void {
+  async routeActivated($event: any): Promise<void> {
     if (this.isCustomTitleComponent($event)) {
-      this.activeRouteTitle = $event.getPageTitle();
+      const title = $event.getPageTitleVars();
+      this.activeComponentVars = title instanceof Promise ? await title : title;
     } else {
-      this.activeRouteTitle = null;
+      this.activeComponentVars = null;
     }
+    this.setPageTitle();
   }
 
   isCustomTitleComponent(obj: any): obj is CustomTitleComponent {
-    return obj?.getPageTitle instanceof Function;
+    return obj?.getPageTitleVars instanceof Function;
   }
 
 }
 
 type MenuItem = { path: string, requiredRole: 'admin', title?: string }; // TODO: Role
-type RouteSegment = { title: string, url: string };
+type RouteSegment = { title: string, url: string, params: Params };
 
 export interface CustomTitleComponent {
-  getPageTitle(): string;
+  getPageTitleVars(): object | Promise<object>;
 }
