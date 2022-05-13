@@ -20,3 +20,7 @@ query Subject($id: ID!) {
 mutation EditSubject($input: SubjectUpdateInput!) {
   subjectUpdate(subject: $input)
 }
+
+mutation CreateSubject($input: SubjectUpdateInput!) {
+  subjectCreate(subject: $input)
+}

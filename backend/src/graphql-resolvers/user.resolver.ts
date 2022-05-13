@@ -8,10 +8,8 @@ import { TokenServiceBindings, UserServiceBindings } from '@loopback/authenticat
 import { TokenService } from '@loopback/authentication';
 import { SecurityBindings, UserProfile } from '@loopback/security';
 import { genSalt, hash } from 'bcryptjs';
-import { UserRegisterInput } from '../graphql-types/input/user-register.input';
 import { validated } from '../helpers';
-import { LoginResult, UserList } from '../graphql-types/user';
-import { UserUpdateInput } from '../graphql-types/input/user-update.input';
+import { LoginResult, UserList, UserRegisterInput, UserUpdateInput } from '../graphql-types/user';
 import { SzakdolgozatBindings } from '../bindings';
 import { listResponse } from '../graphql-types/list';
 

@@ -15,6 +15,8 @@ import { UserResolver } from './graphql-resolvers/user.resolver';
 import { SzakdolgozatAuthChecker } from './szakdolgozat-auth-checker';
 import { CourseResolver } from './graphql-resolvers/course.resolver';
 import { SubjectResolver } from './graphql-resolvers/subject.resolver';
+import { FulfillmentModeResolver } from './graphql-resolvers/fulfillment-mode.resolver';
+import { RequirementResolver } from './graphql-resolvers/requirement.resolver';
 
 export { ApplicationConfig };
 
@@ -36,6 +38,8 @@ export class SzakdolgozatBackendApplication extends BootMixin(
             s.resolver(UserResolver);
             s.resolver(CourseResolver);
             s.resolver(SubjectResolver);
+            s.resolver(FulfillmentModeResolver);
+            s.resolver(RequirementResolver);
         });
 
         // Authentication

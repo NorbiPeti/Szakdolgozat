@@ -2,9 +2,8 @@ import { repository } from '@loopback/repository';
 import { CourseRepository, SubjectRepository, UserRepository } from '../repositories';
 import { arg, ID, Int, mutation, query, resolver } from '@loopback/graphql';
 import { Course } from '../models';
-import { CourseUpdateInput } from '../graphql-types/input/course-update.input';
 import { listResponse, ListResponse } from '../graphql-types/list';
-import { CourseList } from '../graphql-types/course';
+import { CourseList, CourseUpdateInput } from '../graphql-types/course';
 
 @resolver(of => Course)
 export class CourseResolver {
@@ -33,6 +32,12 @@ export class CourseResolver {
     @mutation(returns => Boolean)
     async courseUpdate(@arg('course') input: CourseUpdateInput): Promise<boolean> {
         await this.courseRepo.updateById(input.id, input);
+        return true;
+    }
+
+    @mutation(returns => Boolean)
+    async courseCreate(@arg('course') input: CourseUpdateInput): Promise<boolean> {
+        await this.courseRepo.create(input);
         return true;
     }
 }

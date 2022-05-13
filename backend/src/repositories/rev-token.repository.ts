@@ -6,9 +6,9 @@ import { RevToken, RevTokenRelations } from '../models';
 export class RevTokenRepository extends DefaultCrudRepository<RevToken,
     typeof RevToken.prototype.token,
     RevTokenRelations> {
-  constructor(
-      @inject('datasources.database') dataSource: DatabaseDataSource,
-  ) {
-    super(RevToken, dataSource);
-  }
+    constructor(
+        @inject('datasources.database') dataSource: DatabaseDataSource,
+    ) {
+        super(RevToken, dataSource);
+    }
 }

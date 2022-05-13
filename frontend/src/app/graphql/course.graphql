@@ -31,3 +31,7 @@ query Course($id: ID!) {
 mutation EditCourse($input: CourseUpdateInput!) {
   courseUpdate(course: $input)
 }
+
+mutation CreateCourse($input: CourseUpdateInput!) {
+  courseCreate(course: $input)
+}

@@ -1,6 +1,7 @@
 import { User } from '../models';
-import { field, Int, objectType } from '@loopback/graphql';
+import { field, ID, inputType, Int, objectType } from '@loopback/graphql';
 import { ListResponse } from './list';
+import { model, property } from '@loopback/repository';
 
 @objectType()
 export class UserResult implements Pick<User, 'id' | 'email' | 'name' | 'isAdmin'> {
@@ -60,3 +61,34 @@ export const UserProperties = {
         hidden: true
     }
 };
+
+@model()
+@inputType()
+export class UserRegisterInput implements Pick<User, 'email' | 'name' | 'password'> {
+    @property(UserProperties.email)
+    @field()
+    email: string;
+    @property(UserProperties.name)
+    @field()
+    name: string;
+    @property(UserProperties.password)
+    @field()
+    password: string;
+}
+
+@inputType()
+export class UserUpdateInput implements Partial<Pick<User, 'id' | 'name' | 'email' | 'password' | 'isAdmin'>> {
+    @field(returns => ID)
+    id: number;
+    @field({nullable: true})
+    @property(UserProperties.email)
+    email?: string;
+    @field({nullable: true})
+    @property(UserProperties.name)
+    name?: string;
+    @field({nullable: true})
+    @property(UserProperties.password)
+    password?: string;
+    @field({nullable: true})
+    isAdmin?: boolean;
+}

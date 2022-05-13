@@ -2,8 +2,8 @@ import { belongsTo, Entity, hasMany, model, property } from '@loopback/repositor
 import { Subject } from './subject.model';
 import { User } from './user.model';
 import { CourseUser } from './course-user.model';
-import { Requirement } from './requirement.model';
 import { field, objectType } from '@loopback/graphql';
+import { FulfillmentMode } from './fulfillment-mode.model';
 
 @model()
 @objectType()
@@ -37,8 +37,8 @@ export class Course extends Entity {
     @hasMany(() => User, {through: {model: () => CourseUser}})
     users: User[];
 
-    @hasMany(() => Requirement)
-    requirements: Requirement[];
+    @hasMany(() => FulfillmentMode)
+    fulfillmentModes: FulfillmentMode[];
 
     constructor(data?: Partial<Course>) {
         super(data);

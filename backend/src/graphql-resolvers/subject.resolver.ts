@@ -3,8 +3,7 @@ import { Subject } from '../models';
 import { SubjectRepository } from '../repositories';
 import { repository } from '@loopback/repository';
 import { listResponse, ListResponse } from '../graphql-types/list';
-import { SubjectList } from '../graphql-types/subject';
-import { SubjectUpdateInput } from '../graphql-types/input/subject-update.input';
+import { SubjectList, SubjectUpdateInput } from '../graphql-types/subject';
 
 @resolver(of => Subject)
 export class SubjectResolver {
@@ -24,6 +23,12 @@ export class SubjectResolver {
     @mutation(returns => Boolean)
     async subjectUpdate(@arg('subject') input: SubjectUpdateInput): Promise<boolean> {
         await this.subjectRepo.updateById(input.id, input);
+        return true;
+    }
+
+    @mutation(returns => Boolean)
+    async subjectCreate(@arg('subject') input: SubjectUpdateInput): Promise<boolean> {
+        await this.subjectRepo.create(input);
         return true;
     }
 }
