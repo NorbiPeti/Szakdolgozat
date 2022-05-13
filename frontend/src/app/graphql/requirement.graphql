@@ -27,6 +27,6 @@ mutation EditRequirement($input: RequirementUpdateInput!) {
   requirementUpdate(requirement: $input)
 }
 
-mutation CreateRequirement($input: RequirementUpdateInput!) {
+mutation CreateRequirement($input: RequirementCreateInput!) {
   requirementCreate(requirement: $input)
 }

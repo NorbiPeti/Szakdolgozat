@@ -10,7 +10,8 @@ import { HasID, MutationInput, QueryResult } from '../../utility/types';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class EditComponent<T extends HasID, QT extends QueryResult<T>, UT extends QueryResult<T>, CT extends QueryResult<T>, MI extends Partial<T>>
+export class EditComponent<T extends HasID, QT extends QueryResult<T>, UT extends QueryResult<T>, CT extends QueryResult<T>,
+  MIC extends Partial<T>, MIU extends Partial<T>>
   implements OnInit {
 
   item?: T;
@@ -18,14 +19,16 @@ export class EditComponent<T extends HasID, QT extends QueryResult<T>, UT extend
   isLoading = true;
 
   @Input() gql: Query<QT, HasID>;
-  @Input() updateMutation: Mutation<UT, MutationInput<MI, T>>;
-  @Input() createMutation: Mutation<CT, MutationInput<MI, T>>;
+  @Input() updateMutation: Mutation<UT, MutationInput<MIU, T>>;
+  @Input() createMutation: Mutation<CT, MutationInput<MIC, T>>;
   @Input() fields: { title: string, name: keyof T, readonly?: (item: T) => boolean }[];
   @Input() itemType: T;
   /**
    * Beküldés előtt extra adat hozzáadása
    */
   @Input() beforeSubmit: (item: T) => Partial<T>;
+  @Input() customItem: T;
+  @Input() itemSubmitted: (item: T) => void = this.navigateAfterSubmit;
   formGroup: FormGroup;
 
   private key: string;
@@ -37,8 +40,9 @@ export class EditComponent<T extends HasID, QT extends QueryResult<T>, UT extend
   async ngOnInit(): Promise<void> {
     window.localStorage.removeItem(this.router.url);
     const url = this.route.snapshot.url;
-    this.id = this.route.snapshot.url[this.route.snapshot.url.length - 1] + '';
-    if (!this.item && url[url.length - 1].path !== 'new') {
+    this.item = this.customItem;
+    this.id = this.item?.id ?? this.gql ? url[url.length - 1].path : 'new';
+    if (!this.item && this.id !== 'new' && this.gql) {
       const data = (await this.gql.fetch({id: this.id}).toPromise()).data;
       this.key = Object.keys(data).filter(k => k !== '__typename')[0];
       this.item = data[this.key];
@@ -66,18 +70,21 @@ export class EditComponent<T extends HasID, QT extends QueryResult<T>, UT extend
 
   async submit(): Promise<void> {
     this.isLoading = true;
-    const input = Object.assign({}, this.formGroup.value, (this.beforeSubmit ?? noop)(this.item) ?? {}, {id: this.id}) as MI;
+    const input = Object.assign({}, this.formGroup.value, (this.beforeSubmit ?? noop)(this.formGroup.value) ?? {}, this.id === 'new' ? {} : {id: this.id});
     try {
       if (this.item && !this.creating) {
         await this.updateMutation.mutate({input}).toPromise();
       } else {
         await this.createMutation.mutate({input}).toPromise();
       }
-      await this.router.navigate(['..'], {relativeTo: this.route});
+      this.itemSubmitted(this.item);
     } catch (e) {
-      alert(e.message);
     } // TODO: Clear/update cache
     this.isLoading = false;
+  }
+
+  async navigateAfterSubmit(item: T): Promise<void> {
+    await this.router.navigate(['..'], {relativeTo: this.route});
   }
 
   getType(itemElement: any): typeof itemElement {

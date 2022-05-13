@@ -1,4 +1,31 @@
-<app-edit [beforeSubmit]="beforeSubmit" [gql]="itemGQL" [itemType]="itemType" [updateMutation]="editGQL" [fields]="[
+<app-edit [beforeSubmit]="beforeSubmit" [gql]="itemGQL" [itemType]="itemType" [updateMutation]="editGQL"
+          [createMutation]="createGQL" [fields]="[
   {title: 'Félév', name: 'semester'},
   {title: 'Név', name: 'alias'}
 ]"></app-edit>
+<mat-card style="margin-top: 50px">
+  <mat-card-header>
+    <h3>Teljesitési módok</h3>
+  </mat-card-header>
+  <mat-card-content>
+    <app-list [gql]="modeListGQL" [queryVariables]="{course: courseId}" [columns]="[
+{prop: 'name', title: 'Név'}
+]" allowEditing="true" allowNew="true" [editFunction]="editFulMode.bind(this)"
+              [createFunction]="createFulMode.bind(this)"></app-list>
+  </mat-card-content>
+</mat-card>
+<mat-card *ngIf="editingFulMode">
+  <mat-card-header>
+    {{ editedFulMode?.name || 'Új teljesitési mód' }}
+  </mat-card-header>
+  <mat-card-content>
+    <app-edit [itemType]="editedFulMode" [createMutation]="modeCreateGQL"
+              [updateMutation]="modeEditGQL" [customItem]="editedFulMode" [fields]="[
+              {name: 'name', title: 'Név'},
+              {name: 'threshold2', title: 'Kettes %'},
+              {name: 'threshold3', title: 'Hármas %'},
+              {name: 'threshold4', title: 'Négyes %'},
+              {name: 'threshold5', title: 'Ötös %'}
+]" [beforeSubmit]="beforeFulModeSubmit.bind(this)" [itemSubmitted]="submitFulMode.bind(this)"></app-edit>
+  </mat-card-content>
+</mat-card>

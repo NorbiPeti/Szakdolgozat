@@ -3,7 +3,7 @@ import { CourseRepository, FulfillmentModeRepository, UserRepository } from '../
 import { arg, ID, Int, mutation, query, resolver } from '@loopback/graphql';
 import { FulfillmentMode } from '../models';
 import { listResponse, ListResponse } from '../graphql-types/list';
-import { FulfillmentModeList, FulfillmentModeUpdateInput } from '../graphql-types/fulfillment-mode';
+import { FulfillmentModeCreateInput, FulfillmentModeList, FulfillmentModeUpdateInput } from '../graphql-types/fulfillment-mode';
 
 @resolver(of => FulfillmentMode)
 export class FulfillmentModeResolver {
@@ -31,7 +31,7 @@ export class FulfillmentModeResolver {
     }
 
     @mutation(returns => Boolean)
-    async fulfillmentModeCreate(@arg('input') input: FulfillmentModeUpdateInput): Promise<boolean> {
+    async fulfillmentModeCreate(@arg('input') input: FulfillmentModeCreateInput): Promise<boolean> {
         await this.fulfillmentModeRepo.create(input);
         return true;
     }

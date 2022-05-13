@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EditSubjectGQL, Subject, SubjectGQL } from '../../services/graphql';
+import { CreateSubjectGQL, EditSubjectGQL, Subject, SubjectGQL } from '../../services/graphql';
 
 @Component({
   selector: 'app-subject-edit',
@@ -9,7 +9,7 @@ import { EditSubjectGQL, Subject, SubjectGQL } from '../../services/graphql';
 export class SubjectEditComponent implements OnInit {
   itemType: Subject;
 
-  constructor(public itemGQL: SubjectGQL, public updateGQL: EditSubjectGQL) {
+  constructor(public itemGQL: SubjectGQL, public updateGQL: EditSubjectGQL, public createGQL: CreateSubjectGQL) {
   }
 
   ngOnInit(): void {

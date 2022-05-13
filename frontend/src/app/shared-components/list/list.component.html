@@ -1,7 +1,7 @@
 <div style="width: 100%; text-align: right; padding-bottom: 10px" *ngIf="allowNew">
-  <button mat-raised-button color="primary" (click)="newItem()">Hozzáadás</button>
+  <button mat-raised-button color="primary" (click)="createFunction()">Hozzáadás</button>
 </div>
 <app-table [items]="items" (pageChange)="handlePageChange($event)" [paginationData]="paginationData" [columns]="columns"
-           [loading]="loading" (editItem)="editItem($event)" [customActions]="customActions"
+           [loading]="loading" (editItem)="editFunction($event)" [customActions]="customActions"
            [allowEditing]="allowEditing">
 </app-table>

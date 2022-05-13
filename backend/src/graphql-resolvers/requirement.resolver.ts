@@ -3,7 +3,7 @@ import { FulfillmentModeRepository, RequirementRepository, UserRepository } from
 import { arg, ID, Int, mutation, query, resolver } from '@loopback/graphql';
 import { Requirement } from '../models';
 import { listResponse, ListResponse } from '../graphql-types/list';
-import { RequirementList, RequirementUpdateInput } from '../graphql-types/requirement';
+import { RequirementCreateInput, RequirementList, RequirementUpdateInput } from '../graphql-types/requirement';
 
 @resolver(of => Requirement)
 export class RequirementResolver {
@@ -31,7 +31,7 @@ export class RequirementResolver {
     }
 
     @mutation(returns => Boolean)
-    async requirementCreate(@arg('requirement') input: RequirementUpdateInput): Promise<boolean> {
+    async requirementCreate(@arg('requirement') input: RequirementCreateInput): Promise<boolean> {
         await this.requirementRepo.create(input);
         return true;
     }

@@ -20,6 +20,8 @@ export class ListComponent<T extends { id: number }, U extends { [entityName: st
   @Input() allowNew = false;
   @Input() customActions: { icon: string, label: string, action: (model: T) => void }[] = [];
   @Input() allowEditing = true;
+  @Input() editFunction = this.editItem;
+  @Input() createFunction = this.newItem;
 
   paginationData: PaginationData = {};
   items: T[] = [];
@@ -52,7 +54,6 @@ export class ListComponent<T extends { id: number }, U extends { [entityName: st
   }
 
   async editItem(item: T): Promise<void> {
-    window.localStorage.setItem(this.router.url + '/' + item.id, JSON.stringify(item)); // TODO: Apollo cache
     await this.router.navigate([this.router.url, item.id]);
   }
 

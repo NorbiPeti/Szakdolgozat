@@ -12,13 +12,17 @@ export class CourseList implements ListResponse<Course> {
 }
 
 @inputType()
-export class CourseUpdateInput implements Pick<DataObject<Course>, 'id' | 'semester' | 'alias' | 'subjectId'> {
-    @field(returns => ID)
-    id: number;
+export class CourseCreateInput implements Pick<DataObject<Course>, 'semester' | 'alias' | 'subjectId'> {
     @field()
     semester?: string;
     @field()
     alias?: string;
     @field()
     subjectId?: number;
+}
+
+@inputType()
+export class CourseUpdateInput extends CourseCreateInput {
+    @field(returns => ID)
+    id: number;
 }

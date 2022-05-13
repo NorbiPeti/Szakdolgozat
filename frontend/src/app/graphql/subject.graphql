@@ -21,6 +21,6 @@ mutation EditSubject($input: SubjectUpdateInput!) {
   subjectUpdate(subject: $input)
 }
 
-mutation CreateSubject($input: SubjectUpdateInput!) {
+mutation CreateSubject($input: SubjectCreateInput!) {
   subjectCreate(subject: $input)
 }

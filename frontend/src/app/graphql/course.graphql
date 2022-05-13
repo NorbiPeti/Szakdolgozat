@@ -32,6 +32,6 @@ mutation EditCourse($input: CourseUpdateInput!) {
   courseUpdate(course: $input)
 }
 
-mutation CreateCourse($input: CourseUpdateInput!) {
+mutation CreateCourse($input: CourseCreateInput!) {
   courseCreate(course: $input)
 }

@@ -12,9 +12,7 @@ export class RequirementList implements ListResponse<Requirement> {
 }
 
 @inputType()
-export class RequirementUpdateInput implements Pick<DataObject<Requirement>, 'id' | 'name' | 'description' | 'deadline' | 'minPoints' | 'maxPoints'> {
-    @field(returns => Int)
-    id: number;
+export class RequirementCreateInput implements Pick<DataObject<Requirement>, 'name' | 'description' | 'deadline' | 'minPoints' | 'maxPoints'> {
     @field()
     deadline: Date;
     @field()
@@ -25,4 +23,10 @@ export class RequirementUpdateInput implements Pick<DataObject<Requirement>, 'id
     minPoints: number;
     @field()
     maxPoints: number;
+}
+
+@inputType()
+export class RequirementUpdateInput extends RequirementCreateInput {
+    @field(returns => Int)
+    id: number;
 }

@@ -1,0 +1,31 @@
+query FulfillmentModeList($course: ID!, $offset: Int!, $limit: Int!) {
+  fulfillmentModes(course: $course, offset: $offset, limit: $limit) {
+    list {
+      id
+      name
+      threshold2
+      threshold3
+      threshold4
+      threshold5
+    }
+    count
+  }
+}
+
+query FulfillmentMode($id: ID!) {
+  fulfillmentMode(id: $id) {
+    id
+    threshold2
+    threshold3
+    threshold4
+    threshold5
+  }
+}
+
+mutation EditFulfillmentMode($input: FulfillmentModeUpdateInput!) {
+  fulfillmentModeUpdate(input: $input)
+}
+
+mutation CreateFulfillmentMode($input: FulfillmentModeCreateInput!) {
+  fulfillmentModeCreate(input: $input)
+}

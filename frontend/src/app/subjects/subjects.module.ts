@@ -7,6 +7,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { RouteData } from '../app-routing.module';
 import { CourseListComponent } from './subject-edit/courses/course-list/course-list.component';
 import { CourseEditComponent } from './subject-edit/courses/course-edit/course-edit.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {path: '', component: SubjectListComponent, data: {title: ''} as RouteData},
@@ -24,7 +28,11 @@ const routes: Routes = [
   imports: [
     CommonModule,
     SharedComponentsModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule
   ]
 })
 export class SubjectsModule {

@@ -12,11 +12,15 @@ export class SubjectList implements ListResponse<Subject> {
 }
 
 @inputType()
-export class SubjectUpdateInput implements Pick<DataObject<Subject>, 'id' | 'name' | 'description'> {
-    @field(returns => ID)
-    id: number;
+export class SubjectCreateInput implements Pick<DataObject<Subject>, 'name' | 'description'> {
     @field()
     name?: string;
     @field()
     description?: string;
+}
+
+@inputType()
+export class SubjectUpdateInput extends SubjectCreateInput {
+    @field(returns => ID)
+    id: number;
 }
