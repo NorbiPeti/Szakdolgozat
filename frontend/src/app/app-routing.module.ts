@@ -24,6 +24,11 @@ const routes: Routes = [
         data: {title: 'Hallagtói kezdőlap'}
       },
       {
+        path: 'teacher',
+        loadChildren: async () => (await import('./teachers/teachers.module')).TeachersModule,
+        data: {title: 'Oktatói kezdőlap'}
+      },
+      {
         path: '',
         children: [
           {path: '', component: StartComponent}
