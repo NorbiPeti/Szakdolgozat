@@ -42,6 +42,9 @@ export const UserProperties = {
         required: true,
         jsonSchema: {
             pattern: /[A-Za-z\d.+_-]+@[A-Za-z.-_]*(u-szeged.hu)|(szte.hu)/.source
+        },
+        index: {
+            unique: true
         }
     },
     name: {

@@ -3,7 +3,6 @@ import { UserRepository } from '../repositories';
 import { User } from '../models';
 import { Mock, MockFactory } from 'mockingbird';
 import { genSalt, hash } from 'bcryptjs';
-import { repository } from '@loopback/repository';
 
 /**
  * This class will be bound to the application as a `LifeCycleObserver` during
@@ -39,7 +38,9 @@ export class UserSeederObserver implements LifeCycleObserver {
             for (const user of users) {
                 user.password = await hash('Jelszó 123', await genSalt());
                 if (c >= this.MAX_USERS / 4) {
-                    user.email = user.name.split(' ')[1].toLowerCase() + '@inf.u-szeged.hu';
+                    const ns = user.name.split(' ');
+                    const prefix = ns[0][0].toLowerCase() + ns[1].toLowerCase();
+                    user.email = prefix.replace('\'', '') + '@inf.u-szeged.hu';
                 }
                 await this.repository.create(user);
                 c++;

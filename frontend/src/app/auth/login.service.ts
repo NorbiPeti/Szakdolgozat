@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { LoginGQL, LogoutGQL, UserResult } from '../services/graphql';
+import { LoginGQL, LogoutGQL, RegisterGQL, UserResult } from '../services/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -19,13 +17,13 @@ export class LoginService {
     return this.userP;
   }
 
-  constructor(private http: HttpClient, private loginGQL: LoginGQL, private logoutGQL: LogoutGQL) {
+  constructor(private loginGQL: LoginGQL, private logoutGQL: LogoutGQL, private registerGQL: RegisterGQL) {
     this.tokenP = window.localStorage.getItem('token');
     this.userP = JSON.parse(window.localStorage.getItem('user'));
   }
 
   async createUser(email: string, password: string, name: string): Promise<void> {
-    await this.http.post(environment.backendUrl + '/users', {email, password, name}).toPromise();
+    await this.registerGQL.mutate({user: {email, name, password}}).toPromise();
   }
 
   async login(email: string, password: string): Promise<boolean> {

@@ -28,6 +28,9 @@ export class UserResolver {
 
     @mutation(returns => User)
     async register(@arg('user', validated(UserRegisterInput)) request: UserRegisterInput): Promise<Omit<User, 'password'>> {
+        if ((await this.userRepository.count({email: request.email})).count) {
+            throw new Error('A megadott E-mail cimmel már létezik felhasználó');
+        }
         const password = await hash(request.password, await genSalt());
         const user = {
             email: request.email,
