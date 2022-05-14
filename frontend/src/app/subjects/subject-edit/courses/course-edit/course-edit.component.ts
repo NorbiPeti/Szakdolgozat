@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CustomTitleComponent } from '../../../../app.component';
 import {
   Course,
@@ -40,7 +40,8 @@ export class CourseEditComponent implements OnInit, CustomTitleComponent {
               public itemGQL: CourseGQL, public editGQL: EditCourseGQL, public createGQL: CreateCourseGQL,
               public modeListGQL: FulfillmentModeListGQL, public modeItemGQL: FulfillmentModeGQL, public modeEditGQL: EditFulfillmentModeGQL,
               public modeCreateGQL: CreateFulfillmentModeGQL, public requirementListGQL: RequirementListGQL, public requirementGQL: RequirementGQL,
-              public requirementEditGQL: EditRequirementGQL, public requirementCreateGQL: CreateRequirementGQL) {
+              public requirementEditGQL: EditRequirementGQL, public requirementCreateGQL: CreateRequirementGQL,
+              private router: Router) {
     this.subjectId = route.snapshot.params.subjectId;
     this.courseId = route.snapshot.params.id;
   }
@@ -100,5 +101,9 @@ export class CourseEditComponent implements OnInit, CustomTitleComponent {
   submitRequirement(): void {
     this.editingRequirement = false;
     this.editedRequirement = null;
+  }
+
+  async assignUsers(): Promise<void> {
+    await this.router.navigate(['users', 'assign'], {queryParams: {course: this.courseId}});
   }
 }

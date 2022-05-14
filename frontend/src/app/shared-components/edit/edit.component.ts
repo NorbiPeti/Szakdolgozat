@@ -15,7 +15,7 @@ export class EditComponent<T extends HasID, QT extends QueryResult<T>, UT extend
   implements OnInit {
 
   item?: T;
-  @Input() creating = false;
+  creating = false;
   isLoading = true;
 
   @Input() gql: Query<QT, HasID>;

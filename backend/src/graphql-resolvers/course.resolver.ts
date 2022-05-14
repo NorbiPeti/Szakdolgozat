@@ -40,4 +40,13 @@ export class CourseResolver {
         await this.courseRepo.create(input);
         return true;
     }
+
+    @mutation(returns => Boolean)
+    async courseAssignUser(@arg('course', returns => ID) course: number, @arg('user', returns => ID) user: number, @arg('role') role: string): Promise<boolean> {
+        if (role !== 'teacher' && role !== 'student') {
+            throw new Error('Érvénytelen szerepkör');
+        }
+        await this.courseRepo.users(course).link(user, {throughData: {role: role}});
+        return true;
+    }
 }

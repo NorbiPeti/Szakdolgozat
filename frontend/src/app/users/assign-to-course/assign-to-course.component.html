@@ -1,0 +1,6 @@
+<app-list [itemType]="itemType" [allowEditing]="false" [gql]="listGQL" [customActions]="[
+{action: assignAsTeacher.bind(this), label: 'Oktatóként', icon: ''},
+{action: assignAsStudent.bind(this), label: 'Hallgatóként', icon: ''}
+]" [columns]="[
+{title: 'Név', prop: 'name'}
+]"></app-list>

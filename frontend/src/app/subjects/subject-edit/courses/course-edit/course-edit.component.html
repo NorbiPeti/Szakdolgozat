@@ -3,6 +3,7 @@
   {title: 'Félév', name: 'semester'},
   {title: 'Név', name: 'alias'}
 ]"></app-edit>
+<button mat-raised-button style="margin-top: 20px" (click)="assignUsers()">Felhasználók hozzárendelése</button>
 <mat-card style="margin-top: 50px">
   <mat-card-header>
     <h3>Teljesitési módok</h3>
@@ -10,7 +11,7 @@
   <mat-card-content>
     <app-list [gql]="modeListGQL" [queryVariables]="{course: courseId}" [columns]="[
 {prop: 'name', title: 'Név'}
-]" allowEditing="true" allowNew="true" [editFunction]="editFulMode.bind(this)"
+]" allowNew="true" [editFunction]="editFulMode.bind(this)"
               [createFunction]="createFulMode.bind(this)"></app-list>
   </mat-card-content>
 </mat-card>
@@ -40,7 +41,7 @@
               {prop: 'minPoints', title: 'Minimum elérendő pontszám'},
               {prop: 'maxPoints', title: 'Maximálisan elérhető pontszám'},
               {prop: 'deadline', title: 'Határidő', type: 'date'}
-]" allowEditing="true" allowNew="true" [editFunction]="editRequirement.bind(this)"
+]" allowNew="true" [editFunction]="editRequirement.bind(this)"
               [createFunction]="createRequirement.bind(this)"></app-list>
   </mat-card-content>
 </mat-card>
@@ -49,7 +50,7 @@
     {{ editedRequirement?.name || 'Új követelmény' }}
   </mat-card-header>
   <mat-card-content>
-    <app-edit [itemType]="editedRequirement" creating="true" [createMutation]="requirementCreateGQL"
+    <app-edit [itemType]="editedRequirement" [createMutation]="requirementCreateGQL"
               [updateMutation]="requirementEditGQL" [customItem]="editedRequirement" [fields]="[
               {name: 'name', title: 'Név'},
               {name: 'description', title: 'Leirás'},

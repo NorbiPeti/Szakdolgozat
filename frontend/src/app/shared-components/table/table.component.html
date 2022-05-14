@@ -24,9 +24,12 @@
           <button *ngIf="allowEditing" mat-icon-button color="primary" (click)="editItem.emit(item)">
             <mat-icon>edit</mat-icon>
           </button>
-          <button *ngFor="let action of customActions" mat-icon-button color="primary" (click)="action.action(item)">
-            <mat-icon [matTooltip]="action.label">{{ action.icon }}</mat-icon>
-          </button>
+          <ng-container *ngFor="let action of customActions">
+            <button *ngIf="action.icon" mat-icon-button color="primary" (click)="action.action(item)">
+              <mat-icon [matTooltip]="action.label">{{ action.icon }}</mat-icon>
+            </button>
+            <button *ngIf="!action.icon" mat-button (mouseup)="action.action(item)">{{ action.label }}</button>
+          </ng-container>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="getPropNames()"></tr>

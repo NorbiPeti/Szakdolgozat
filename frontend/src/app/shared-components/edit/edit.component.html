@@ -13,7 +13,9 @@
         </span>
         <span *ngSwitchCase="'date'">
           <mat-form-field>
-            <mat-datepicker [formControlName]="field.name" [ngModel]="item[field.name]"></mat-datepicker>
+            <input matInput [formControlName]="field.name" [matDatepicker]="datePicker" [value]="item[field.name]"/>
+            <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <mat-datepicker #datePicker></mat-datepicker>
           </mat-form-field>
         </span>
         <mat-form-field *ngSwitchDefault>

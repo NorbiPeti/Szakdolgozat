@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, ValidationErrors, Validators} from '@angular/forms';
-import {LoginService} from '../login.service';
-import {Router} from '@angular/router';
-import {FormErrorStateMatcher} from '../../utility/form-error-state-matcher';
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormControl, ValidationErrors, Validators } from '@angular/forms';
+import { LoginService } from '../login.service';
+import { Router } from '@angular/router';
+import { FormErrorStateMatcher } from '../../utility/form-error-state-matcher';
 
 @Component({
   selector: 'app-register',
@@ -74,8 +74,7 @@ export class RegisterComponent implements OnInit {
     try {
       await this.loginService.createUser(this.emailFormControl.value, this.passFormControl.value, this.nameFormControl.value);
       await this.router.navigate(['/']);
-    } catch (e) {
-      alert(e);
+    } catch (e) { // A GraphQL már kiirja
     }
   }
 

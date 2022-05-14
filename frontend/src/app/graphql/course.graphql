@@ -35,3 +35,7 @@ mutation EditCourse($input: CourseUpdateInput!) {
 mutation CreateCourse($input: CourseCreateInput!) {
   courseCreate(course: $input)
 }
+
+mutation CourseAssignUser($user: ID!, $course: ID!, $role: String!) {
+  courseAssignUser(user: $user, course: $course, role: $role)
+}

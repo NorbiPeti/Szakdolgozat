@@ -24,6 +24,9 @@ export class TableComponent<T> implements OnInit {
   }
 
   ngOnInit(): void {
+    if (typeof this.allowEditing === 'string') {
+      throw new Error('use [allowEditing]');
+    }
   }
 
   getPropNames(): string[] {
