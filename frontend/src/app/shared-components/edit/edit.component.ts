@@ -15,13 +15,13 @@ export class EditComponent<T extends HasID, QT extends QueryResult<T>, UT extend
   implements OnInit {
 
   item?: T;
-  creating = false;
+  @Input() creating = false;
   isLoading = true;
 
   @Input() gql: Query<QT, HasID>;
   @Input() updateMutation: Mutation<UT, MutationInput<MIU, T>>;
   @Input() createMutation: Mutation<CT, MutationInput<MIC, T>>;
-  @Input() fields: { title: string, name: keyof T, readonly?: (item: T) => boolean }[];
+  @Input() fields: { title: string, name: keyof T, readonly?: (item: T) => boolean, type?: string }[];
   @Input() itemType: T;
   /**
    * Beküldés előtt extra adat hozzáadása
@@ -42,7 +42,7 @@ export class EditComponent<T extends HasID, QT extends QueryResult<T>, UT extend
     const url = this.route.snapshot.url;
     this.item = this.customItem;
     this.id = this.item?.id ?? this.gql ? url[url.length - 1].path : 'new';
-    if (!this.item && this.id !== 'new' && this.gql) {
+    if (!this.item && this.id !== 'new' && this.gql && !this.creating) {
       const data = (await this.gql.fetch({id: this.id}).toPromise()).data;
       this.key = Object.keys(data).filter(k => k !== '__typename')[0];
       this.item = data[this.key];
@@ -87,8 +87,8 @@ export class EditComponent<T extends HasID, QT extends QueryResult<T>, UT extend
     await this.router.navigate(['..'], {relativeTo: this.route});
   }
 
-  getType(itemElement: any): typeof itemElement {
-    return typeof itemElement;
+  getType(field: typeof EditComponent.prototype.fields[number] | null, value: any): typeof value | string {
+    return field?.type ?? typeof value;
   }
 
 }

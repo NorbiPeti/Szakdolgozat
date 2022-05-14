@@ -1,6 +1,6 @@
 import { Entity, hasMany, model, property } from '@loopback/repository';
 import { Requirement } from './requirement.model';
-import { field, ID, objectType } from '@loopback/graphql';
+import { field, ID, Int, objectType } from '@loopback/graphql';
 
 @model()
 @objectType()
@@ -24,28 +24,28 @@ export class FulfillmentMode extends Entity {
         type: 'number',
         required: true,
     })
-    @field()
+    @field(returns => Int)
     threshold2: number;
 
     @property({
         type: 'number',
         required: true,
     })
-    @field()
+    @field(returns => Int)
     threshold3: number;
 
     @property({
         type: 'number',
         required: true,
     })
-    @field()
+    @field(returns => Int)
     threshold4: number;
 
     @property({
         type: 'number',
         required: true,
     })
-    @field()
+    @field(returns => Int)
     threshold5: number;
 
     @property({

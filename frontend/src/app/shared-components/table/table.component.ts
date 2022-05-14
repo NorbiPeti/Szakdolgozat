@@ -12,7 +12,7 @@ export class TableComponent<T> implements OnInit {
   @Input() showHeader = false;
   @Input() items: T[] = [];
   @Input() loading = false;
-  @Input() columns: { title: string, prop: string }[] = [];
+  @Input() columns: { title: string, prop: string, type?: string }[] = [];
   @Input() paginationData: PaginationData = {page: 1, limit: 10};
   @Input() customActions: { icon: string, label: string, action: (model: T) => void }[] = [];
   @Input() allowEditing = true;
@@ -30,8 +30,8 @@ export class TableComponent<T> implements OnInit {
     return this.columns.map(col => col.prop).concat('actions');
   }
 
-  getType(itemElement: any): typeof itemElement {
-    return typeof itemElement;
+  getType(field: typeof TableComponent.prototype.columns[number] | null, value: any): typeof value | string {
+    return field?.type ?? typeof value;
   }
 }
 

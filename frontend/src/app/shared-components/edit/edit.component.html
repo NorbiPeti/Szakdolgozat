@@ -2,9 +2,19 @@
   <form [formGroup]="formGroup">
     <div *ngFor="let field of fields">
       <mat-label>{{ field.title }}</mat-label>
-      <span [ngSwitch]="getType(item[field.name])">
+      <span [ngSwitch]="getType(field, item[field.name])">
         <span *ngSwitchCase="'boolean'">
           <mat-checkbox [checked]="item[field.name]" [formControlName]="field.name"></mat-checkbox>
+        </span>
+        <span *ngSwitchCase="'integer'">
+          <mat-form-field>
+            <input matInput [formControlName]="field.name" type="number" [value]="item[field.name]"/>
+          </mat-form-field>
+        </span>
+        <span *ngSwitchCase="'date'">
+          <mat-form-field>
+            <mat-datepicker [formControlName]="field.name" [ngModel]="item[field.name]"></mat-datepicker>
+          </mat-form-field>
         </span>
         <mat-form-field *ngSwitchDefault>
           <input matInput [formControlName]="field.name" type="text" [value]="item[field.name]"/>

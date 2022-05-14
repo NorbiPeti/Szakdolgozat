@@ -10,8 +10,9 @@
       <ng-container *ngFor="let col of columns" [matColumnDef]="col.prop">
         <th mat-header-cell *matHeaderCellDef>{{ col.title }}</th>
         <td mat-cell *matCellDef="let item">
-          <span [ngSwitch]="getType(item[col.prop])">
+          <span [ngSwitch]="getType(col, item[col.prop])">
             <span *ngSwitchCase="'boolean'"><mat-checkbox [checked]="item[col.prop]" disabled="disabled"></mat-checkbox></span>
+            <span *ngSwitchCase="'date'">{{ item[col.prop] | date }}</span>
             <span *ngSwitchDefault>{{ item[col.prop] }}</span>
           </span>
         </td>

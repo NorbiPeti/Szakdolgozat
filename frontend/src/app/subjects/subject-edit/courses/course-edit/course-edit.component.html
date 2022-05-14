@@ -19,13 +19,43 @@
     {{ editedFulMode?.name || 'Új teljesitési mód' }}
   </mat-card-header>
   <mat-card-content>
-    <app-edit [itemType]="editedFulMode" [createMutation]="modeCreateGQL"
+    <app-edit [itemType]="editedFulMode" creating [createMutation]="modeCreateGQL"
               [updateMutation]="modeEditGQL" [customItem]="editedFulMode" [fields]="[
               {name: 'name', title: 'Név'},
-              {name: 'threshold2', title: 'Kettes %'},
-              {name: 'threshold3', title: 'Hármas %'},
-              {name: 'threshold4', title: 'Négyes %'},
-              {name: 'threshold5', title: 'Ötös %'}
+              {name: 'threshold2', title: 'Kettes %', type: 'integer'},
+              {name: 'threshold3', title: 'Hármas %', type: 'integer'},
+              {name: 'threshold4', title: 'Négyes %', type: 'integer'},
+              {name: 'threshold5', title: 'Ötös %', type: 'integer'}
 ]" [beforeSubmit]="beforeFulModeSubmit.bind(this)" [itemSubmitted]="submitFulMode.bind(this)"></app-edit>
+  </mat-card-content>
+</mat-card>
+<mat-card style="margin-top: 50px" *ngIf="editingFulMode">
+  <mat-card-header>
+    <h3>Követelmények</h3>
+  </mat-card-header>
+  <mat-card-content>
+    <app-list [gql]="requirementListGQL" [queryVariables]="{mode: this.editedFulMode.id}" [columns]="[
+              {prop: 'name', title: 'Név'},
+              {prop: 'description', title: 'Leirás'},
+              {prop: 'minPoints', title: 'Minimum elérendő pontszám'},
+              {prop: 'maxPoints', title: 'Maximálisan elérhető pontszám'},
+              {prop: 'deadline', title: 'Határidő', type: 'date'}
+]" allowEditing="true" allowNew="true" [editFunction]="editRequirement.bind(this)"
+              [createFunction]="createRequirement.bind(this)"></app-list>
+  </mat-card-content>
+</mat-card>
+<mat-card *ngIf="editingRequirement">
+  <mat-card-header>
+    {{ editedRequirement?.name || 'Új követelmény' }}
+  </mat-card-header>
+  <mat-card-content>
+    <app-edit [itemType]="editedRequirement" creating="true" [createMutation]="requirementCreateGQL"
+              [updateMutation]="requirementEditGQL" [customItem]="editedRequirement" [fields]="[
+              {name: 'name', title: 'Név'},
+              {name: 'description', title: 'Leirás'},
+              {name: 'minPoints', title: 'Minimum elérendő pontszám', type: 'integer'},
+              {name: 'maxPoints', title: 'Maximálisan elérhető pontszám', type: 'integer'},
+              {name: 'deadline', title: 'Határidő', type: 'date'}
+]" [beforeSubmit]="beforeRequirementSubmit.bind(this)" [itemSubmitted]="submitRequirement.bind(this)"></app-edit>
   </mat-card-content>
 </mat-card>

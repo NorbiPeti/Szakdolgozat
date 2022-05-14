@@ -6,12 +6,18 @@ import {
   CourseGQL,
   CreateCourseGQL,
   CreateFulfillmentModeGQL,
+  CreateRequirementGQL,
   EditCourseGQL,
   EditFulfillmentModeGQL,
+  EditRequirementGQL,
   FulfillmentMode,
   FulfillmentModeGQL,
   FulfillmentModeListGQL,
   FulfillmentModeUpdateInput,
+  Requirement,
+  RequirementGQL,
+  RequirementListGQL,
+  RequirementUpdateInput,
   SubjectGQL
 } from '../../../../services/graphql';
 
@@ -26,12 +32,15 @@ export class CourseEditComponent implements OnInit, CustomTitleComponent {
   courseId: string;
   editedFulMode: FulfillmentMode;
   editingFulMode = false;
+  editedRequirement: Requirement;
+  editingRequirement = false;
   beforeSubmit = () => ({subjectId: +this.route.snapshot.params.subjectId});
 
   constructor(private route: ActivatedRoute, public subjectGQL: SubjectGQL,
               public itemGQL: CourseGQL, public editGQL: EditCourseGQL, public createGQL: CreateCourseGQL,
               public modeListGQL: FulfillmentModeListGQL, public modeItemGQL: FulfillmentModeGQL, public modeEditGQL: EditFulfillmentModeGQL,
-              public modeCreateGQL: CreateFulfillmentModeGQL) {
+              public modeCreateGQL: CreateFulfillmentModeGQL, public requirementListGQL: RequirementListGQL, public requirementGQL: RequirementGQL,
+              public requirementEditGQL: EditRequirementGQL, public requirementCreateGQL: CreateRequirementGQL) {
     this.subjectId = route.snapshot.params.subjectId;
     this.courseId = route.snapshot.params.id;
   }
@@ -59,7 +68,7 @@ export class CourseEditComponent implements OnInit, CustomTitleComponent {
       if (val < 0) {
         val = 0;
       }
-      ((item[prop]) as number) = val > 1 ? val as number / 100 : +val;
+      ((item[prop]) as number) = val > 100 ? 100 : +val;
     }
 
     thresh('threshold2');
@@ -72,5 +81,24 @@ export class CourseEditComponent implements OnInit, CustomTitleComponent {
   submitFulMode(): void {
     this.editedFulMode = null;
     this.editingFulMode = false;
+  }
+
+  async editRequirement(item: Requirement): Promise<void> {
+    this.editingRequirement = true;
+    this.editedRequirement = item;
+  }
+
+  async createRequirement(item: Requirement): Promise<void> {
+    this.editingRequirement = true;
+    this.editedRequirement = null;
+  }
+
+  beforeRequirementSubmit(item: Requirement): Partial<RequirementUpdateInput> {
+    return {...item, fulfillmentModeId: this.editedFulMode.id};
+  }
+
+  submitRequirement(): void {
+    this.editingRequirement = false;
+    this.editedRequirement = null;
   }
 }

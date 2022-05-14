@@ -8,6 +8,7 @@ import { Subject, SubjectListGQL } from '../../services/graphql';
   styleUrls: ['./subject-list.component.css']
 })
 export class SubjectListComponent implements OnInit {
+  itemType: Subject;
 
   constructor(private route: ActivatedRoute, private router: Router, public listGQL: SubjectListGQL) {
   }

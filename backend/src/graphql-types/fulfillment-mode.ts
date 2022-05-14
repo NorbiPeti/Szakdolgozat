@@ -15,13 +15,13 @@ export class FulfillmentModeList implements ListResponse<FulfillmentMode> {
 export class FulfillmentModeCreateInput implements Omit<DataObject<FulfillmentMode>, 'requirements' | 'courseId'> {
     @field()
     name: string;
-    @field()
+    @field(returns => Int)
     threshold2: number;
-    @field()
+    @field(returns => Int)
     threshold3: number;
-    @field()
+    @field(returns => Int)
     threshold4: number;
-    @field()
+    @field(returns => Int)
     threshold5: number;
     @field(returns => ID)
     courseId: number;
