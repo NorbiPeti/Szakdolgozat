@@ -3,6 +3,8 @@ import { UserRepository } from '../repositories';
 import { User } from '../models';
 import { Mock, MockFactory } from 'mockingbird';
 import { genSalt, hash } from 'bcryptjs';
+// noinspection ES6UnusedImports
+import { repository } from '@loopback/repository';
 
 /**
  * This class will be bound to the application as a `LifeCycleObserver` during

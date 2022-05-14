@@ -1,14 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthCheck } from './auth-check';
+import { StartComponent } from './start.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    children: [
-      {path: 'auth', loadChildren: async () => (await import('./auth/auth.module')).AuthModule}
-    ]
-  },
   {
     path: '',
     canActivate: [AuthCheck],
@@ -22,7 +17,24 @@ const routes: Routes = [
         path: 'subjects',
         loadChildren: async () => (await import('./subjects/subjects.module')).SubjectsModule,
         data: {title: 'Tárgyak'}
+      },
+      {
+        path: 'student',
+        loadChildren: async () => (await import('./students/students.module')).StudentsModule,
+        data: {title: 'Hallagtói kezdőlap'}
+      },
+      {
+        path: '',
+        children: [
+          {path: '', component: StartComponent}
+        ]
       }
+    ]
+  },
+  {
+    path: '',
+    children: [
+      {path: 'auth', loadChildren: async () => (await import('./auth/auth.module')).AuthModule}
     ]
   }
 ];

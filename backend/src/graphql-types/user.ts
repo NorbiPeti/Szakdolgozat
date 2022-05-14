@@ -21,6 +21,8 @@ export class LoginResult {
     token: string;
     @field()
     user: UserResult;
+    @field(returns => [String])
+    roles: string[];
 }
 
 @objectType()

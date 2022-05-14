@@ -18,10 +18,12 @@ import { LoginService } from './auth/login.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthCheck } from './auth-check';
 import { GraphQLModule } from './graphql.module';
+import { StartComponent } from './start.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    StartComponent
   ],
   imports: [
     BrowserModule,

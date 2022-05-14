@@ -1,7 +1,7 @@
 import { arg, authorized, GraphQLBindings, ID, Int, mutation, query, resolver, ResolverData } from '@loopback/graphql';
 import { User } from '../models';
 import { repository } from '@loopback/repository';
-import { RevTokenRepository, UserRepository } from '../repositories';
+import { CourseUserRepository, RevTokenRepository, UserRepository } from '../repositories';
 import { Context, inject } from '@loopback/core';
 import { SzakdolgozatUserService } from '../services';
 import { TokenServiceBindings, UserServiceBindings } from '@loopback/authentication-jwt';
@@ -18,6 +18,7 @@ export class UserResolver {
     constructor(
         @repository('UserRepository') private readonly userRepository: UserRepository,
         @repository('RevTokenRepository') private readonly revTokenRepo: RevTokenRepository,
+        @repository('CourseUserRepository') private readonly courseUserRepo: CourseUserRepository,
         @inject(UserServiceBindings.USER_SERVICE) private readonly userService: SzakdolgozatUserService,
         @inject(GraphQLBindings.RESOLVER_DATA) private readonly resolverData: ResolverData,
         @inject(TokenServiceBindings.TOKEN_SERVICE) public jwtService: TokenService,
@@ -50,7 +51,17 @@ export class UserResolver {
 
         // create a JSON Web Token based on the user profile
         const token = await this.jwtService.generateToken(userProfile);
-        return {token, user};
+        let roles = [];
+        if (user.isAdmin) {
+            roles.push('admin');
+        }
+        if ((await this.courseUserRepo.count({userId: user.id, role: 'teacher'})).count) {
+            roles.push('teacher');
+        }
+        if ((await this.courseUserRepo.count({userId: user.id, role: 'student'})).count) {
+            roles.push('student');
+        }
+        return {token, user, roles};
     }
 
     @authorized()

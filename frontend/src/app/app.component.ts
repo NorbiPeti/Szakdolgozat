@@ -22,7 +22,8 @@ export class AppComponent implements OnInit {
 
   menu: MenuItem[] = [
     {path: 'users', requiredRole: 'admin'},
-    {path: 'subjects', requiredRole: 'admin'}
+    {path: 'subjects', requiredRole: 'admin'},
+    {path: 'student', requiredRole: 'student'}
   ];
 
   pageTitle: string;
@@ -129,8 +130,11 @@ export class AppComponent implements OnInit {
     await this.router.navigate(['/']);
   }
 
-  getMenuItems(): MenuItem[] {
-    return this.menu.filter(item => item.requiredRole === 'admin' ? this.loginService.user?.isAdmin : true); // TODO: Roles
+  getMenuItems(): Observable<MenuItem[]> {
+    return this.loginService.rolesChanged.pipe(map(roles => {
+      const menu = this.menu.filter(({requiredRole}) => roles && requiredRole ? roles.includes(requiredRole) : !requiredRole);
+      return menu;
+    }));
   }
 
   async routeActivated($event: any): Promise<void> {
@@ -149,7 +153,7 @@ export class AppComponent implements OnInit {
 
 }
 
-type MenuItem = { path: string, requiredRole: 'admin', title?: string }; // TODO: Role
+type MenuItem = { path: string, requiredRole: 'admin' | 'teacher' | 'student', title?: string };
 type RouteSegment = { title: string, url: string, params: Params };
 
 export interface CustomTitleComponent {
